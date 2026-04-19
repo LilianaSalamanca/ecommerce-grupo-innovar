@@ -1,6 +1,8 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://TU-BACKEND.up.railway.app',
+
+  apiUrl: 'https://ecommerce-grupo-innovar-production.up.railway.app',
+  
   firebase: {
     apiKey: "AIzaSyDAlJu0ls3HYdhZXHJ1cEc2VA6u_DIrboE",
     authDomain: "ecommerce-grupo-innovar.firebaseapp.com",
