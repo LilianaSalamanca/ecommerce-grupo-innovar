@@ -1,0 +1,135 @@
+<div class="container" *ngIf="!loading && order">
+
+  <button class="back-btn" (click)="goBack()">
+    ← Volver a pedidos
+  </button>
+
+  <!-- HEADER -->
+  <div class="header">
+
+    <div class="header-info">
+      <h2>Pedido #PED-{{ order.id }}</h2>
+      <p class="fecha">
+        Realizado el {{ order.fechaCreacion | date:'fullDate' }}
+      </p>
+    </div>
+
+    <!-- ESTADOS CON CONTEXTO -->
+    <div class="status-group">
+
+      <!-- ESTADO PEDIDO -->
+      <div class="status-block">
+        <span class="label">Estado del pedido</span>
+        <span class="badge estado"
+          [ngClass]="order.estadoPedido?.toLowerCase()">
+          <i class="dot"></i>
+          {{ order.estadoPedido }}
+        </span>
+      </div>
+
+      <!-- ESTADO PAGO -->
+      <div class="status-block">
+        <span class="label">Estado del pago</span>
+        <span class="badge pago"
+          [ngClass]="order.estadoPago?.toLowerCase() || 'pendiente'">
+          <i class="dot"></i>
+          {{ order.estadoPago || 'PENDIENTE' }}
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- PRODUCTOS -->
+  <div class="card productos">
+    <h3>Productos del pedido</h3>
+
+    <div class="item" *ngFor="let item of order.detalles">
+
+      <img [src]="'assets/' + item.imagenDestacada">
+
+      <div class="info">
+        <h4>{{ item.nombreProducto }}</h4>
+        <p class="meta">
+          {{ item.cantidad }} × {{ item.precioUnitario | currency:'COP' }}
+        </p>
+      </div>
+
+      <div class="subtotal">
+        {{ item.subtotal | currency:'COP' }}
+      </div>
+
+    </div>
+  </div>
+
+  <!-- GRID -->
+  <div class="grid">
+
+    <!-- PAGO -->
+    <div class="card">
+      <h3>Información de pago</h3>
+
+      <div class="info-block">
+        <span>Método</span>
+        <b>{{ order.metodoPago }}</b>
+      </div>
+
+      <div class="info-block">
+        <span>Estado</span>
+        <b>{{ order.estadoPago || 'PENDIENTE' }}</b>
+      </div>
+
+      <div class="info-block">
+        <span>Referencia</span>
+        <b>{{ order.referenciaPago || '---' }}</b>
+      </div>
+
+      <a *ngIf="order.checkoutUrl"
+         class="btn-pago"
+         [href]="order.checkoutUrl"
+         target="_blank">
+        Completar pago
+      </a>
+
+    </div>
+
+    <!-- ENVÍO -->
+    <div class="card">
+      <h3>Dirección de envío</h3>
+
+      <p class="cliente">
+        {{ order.nombreCliente || 'Cliente' }}
+        {{ order.apellidoCliente || '' }}
+      </p>
+
+      <p>{{ order.direccionEnvio }}</p>
+      <p>{{ order.ciudadEnvio }} - {{ order.departamentoEnvio }}</p>
+      <p>{{ order.telefonoCliente || 'Sin teléfono' }}</p>
+    </div>
+
+  </div>
+
+  <!-- TOTAL -->
+  <div class="card total">
+
+    <div class="row">
+      <span>Subtotal</span>
+      <span>{{ order.subtotal | currency:'COP' }}</span>
+    </div>
+
+    <div class="row">
+      <span>Envío</span>
+      <span>{{ order.costoEnvio | currency:'COP' }}</span>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="row total-row">
+      <span>Total</span>
+      <span>{{ order.total | currency:'COP' }}</span>
+    </div>
+
+  </div>
+
+</div>

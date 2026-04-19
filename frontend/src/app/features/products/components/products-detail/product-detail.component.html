@@ -1,0 +1,48 @@
+<div class="product-detail" *ngIf="!cargando">
+
+  <div class="back-btn" (click)="volver()">← Volver</div>
+
+  <div class="detail-container">
+
+    <div class="image-section">
+      <img [src]="'assets/' + producto.imagenDestacada" alt="{{ producto.nombre }}">
+    </div>
+
+    <div class="info-section">
+
+      <h1>{{ producto.nombre }}</h1>
+      <p class="brand">{{ producto.marca }}</p>
+
+      <p class="price">
+        ${{ producto.precioPublico | number:'1.0-0' }}
+      </p>
+
+      <p class="stock" [class.no]="producto.stock === 0">
+        Stock: {{ producto.stock > 0 ? producto.stock : 'No disponible' }}
+      </p>
+
+      <p class="description">{{ producto.descripcion }}</p>
+
+      <button class="btn-primary" (click)="agregarAlCarrito($event)">
+        Agregar al carrito
+      </button>
+
+      <button class="btn-buy" (click)="comprarAhora()">
+        Comprar ahora
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="related-section" *ngIf="relacionados.length > 0">
+    <h2>Productos relacionados</h2>
+
+    <div class="related-list">
+      <app-product-card
+        *ngFor="let r of relacionados"
+        [producto]="r">
+      </app-product-card>
+    </div>
+  </div>
+</div>

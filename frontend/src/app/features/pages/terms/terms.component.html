@@ -1,0 +1,36 @@
+<section class="terms">
+
+  <div class="terms-container">
+
+    <h1>Términos y Condiciones</h1>
+
+    <p class="terms-subtitle">
+      Información legal importante sobre el uso de nuestra tienda
+    </p>
+
+    <div class="terms-list">
+
+      <div
+        class="terms-item"
+        *ngFor="let term of terms; let i = index"
+        (click)="toggle(i)"
+        [class.active]="activeIndex === i">
+
+        <div class="terms-title">
+          <span>{{ term.title }}</span>
+          <span class="icon">
+            {{ activeIndex === i ? '−' : '+' }}
+          </span>
+        </div>
+
+        <div class="terms-text" *ngIf="activeIndex === i">
+          {{ term.text }}
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>

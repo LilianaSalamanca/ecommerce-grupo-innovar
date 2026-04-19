@@ -1,0 +1,12 @@
+@if (!router.url.startsWith('/admin')) {
+  <app-navbar />
+
+  <div class="public-content">
+    <router-outlet />
+  </div>
+  
+  <app-whatsapp-button />
+  <app-footer></app-footer>
+} @else {
+  <router-outlet />
+}

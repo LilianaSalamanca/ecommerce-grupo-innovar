@@ -1,0 +1,60 @@
+<nav class="navbar">
+  <div class="nav-container">
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="menu" [ngClass]="{ 'open': menuAbierto }">
+
+      <!-- LOGO -->
+      <a class="logo" routerLink="/">
+        <img src="assets/logo.png" alt="Grupo Innovar" />
+      </a>
+
+      <!-- BUSCADOR -->
+      <div class="buscador">
+        <input class="input-busqueda"
+          type="text"
+          [(ngModel)]="terminoBusqueda"
+          (keyup)="onSearchInput()"
+          placeholder="Buscar productos..."
+        />
+        <i class="fas fa-search"></i>
+      </div>
+
+      <!-- ACCIONES -->
+      <div class="acciones">
+
+        <!-- CARRITO -->
+        <a class="carrito" routerLink="/cart">
+          <i class="fas fa-shopping-cart"></i>
+          <span *ngIf="cantidadCarrito > 0" class="contador">
+            {{ cantidadCarrito }}
+          </span>
+        </a>
+
+        <!-- LOGUEADO -->
+        <ng-container *ngIf="isLogged; else noLogueado">
+
+          <div class="usuario-menu" (mouseleave)="closeUserMenu()">
+            <button class="usuario-btn" (mouseover)="openUserMenu()">
+              <span class="icono-usuario"><i class="fas fa-user"></i></span>
+               {{ nombreUsuario }} <i class="fas fa-chevron-down"></i>
+            </button>
+
+            <div class="usuario-dropdown" [ngClass]="{ 'show': userMenuOpen }">
+              <a routerLink="/dashboard">Mi perfil</a>
+              <a routerLink="/orders">Mis pedidos</a>
+              <a (click)="logout()">Cerrar sesión</a>
+            </div>
+          </div>
+
+        </ng-container>
+
+        <!-- NO LOGUEADO -->
+        <ng-template #noLogueado>
+          <button class="btn-login" routerLink="/login">Ingresar</button>
+        </ng-template>
+
+      </div>
+    </div>
+  </div>
+</nav>

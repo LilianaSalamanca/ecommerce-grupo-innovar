@@ -1,0 +1,109 @@
+.auth-wrapper {
+  margin-top: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--white);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 390px;
+  padding: 32px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.subtitle {
+  margin-top: 4px;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+
+  label {
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  input {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    outline: none;
+    font-size: 1rem;
+
+    &:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(235,90,35,0.2);
+    }
+  }
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background: var(--primary);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: 0.3s;
+
+  &:hover {
+    background: var(--secondary);
+  }
+}
+
+.error-message {
+  margin-top: 15px;
+  color: #d32f2f;
+  font-weight: 600;
+  text-align: center;
+}
+
+.success-message {
+  margin-top: 15px;
+  color: #2e7d32;
+  font-weight: 600;
+  text-align: center;
+}
+
+.register-link {
+  margin-top: 15px;
+  font-size: 0.95rem;
+  text-align: center;
+
+  a {
+    color: var(--primary);
+    font-weight: 600;
+    margin-left: 3px;
+    cursor: pointer;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .auth-wrapper {
+    padding-top: 30px;
+  }
+}

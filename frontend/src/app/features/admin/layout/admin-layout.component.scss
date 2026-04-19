@@ -1,0 +1,245 @@
+/* ================= WRAPPER ================= */
+
+.admin-wrapper {
+  display: flex;
+  height: 100vh;       
+  overflow: hidden;     
+  background: #0f172a;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ================= SIDEBAR ================= */
+
+.admin-sidebar {
+  width: 260px;
+  background: #111827;
+  color: #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+  flex-shrink: 0;       /* 🔥 Evita que se encoja */
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 2.5rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.logo-img {
+  height: 40px;
+  width: auto;
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.nav-links a {
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #d1d5db;
+  font-weight: 500;
+  transition: 0.2s ease;
+}
+
+.nav-links a:hover {
+  background: #1f2937;
+}
+
+.nav-links a.active {
+  background: #2563eb;
+  color: white;
+}
+
+/* ================= SIDEBAR FOOTER ================= */
+
+.admin-sidebar-footer {
+  margin-top: auto;      /* 🔥 Empuja al fondo */
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 1rem;
+}
+
+.footer-link {
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #d1d5db;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.footer-link:hover,
+.footer-link.active {
+  background: #1f2937;
+  color: white;
+}
+
+.logout-btn {
+  background: #ef4444;
+  border: none;
+  color: white;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.logout-btn:hover {
+  background: #dc2626;
+}
+
+/* ================= MAIN ================= */
+
+.admin-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;      /* 🔥 Muy importante */
+}
+
+/* Si decides usar header más adelante */
+.admin-header {
+  height: 70px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.admin-content {
+  flex: 1;
+  padding: 0;
+  overflow-y: auto;      /* 🔥 SOLO aquí hay scroll */
+  background: #111827;
+}
+
+/* ================= COMPONENTES INTERNOS ================= */
+
+/* ANALYTICS GRID */
+.analytics-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.chart-card,
+.comparison-card,
+.orders-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 18px;
+  box-shadow: 0 6px 30px rgba(0,0,0,0.05);
+}
+
+/* COMPARISON */
+.growth {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.positive { color: #10b981; }
+.negative { color: #ef4444; }
+
+/* TABLE */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+th, td {
+  padding: 0.8rem;
+  text-align: left;
+}
+
+thead {
+  background: #f9fafb;
+}
+
+.status.completed {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.status.pending {
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+/* ================= SKELETON ================= */
+
+.skeleton-wrapper {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.skeleton-card {
+  height: 120px;
+  background: linear-gradient(90deg, #eee 25%, #f5f5f5 50%, #eee 75%);
+  background-size: 200% 100%;
+  border-radius: 16px;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.user-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 10px;
+  margin-bottom: 20px;
+
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+}
+
+/* Avatar tipo admin moderno */
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+
+  .nombre {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .email {
+    font-size: 11px;
+    color: #cbd5f5;
+  }
+}

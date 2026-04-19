@@ -1,0 +1,49 @@
+<div class="modal-backdrop">
+  <div class="modal-content">
+    <h3>{{ usuario ? 'Actualizar Usuario' : 'Crear Usuario' }}</h3>
+
+    <form #form="ngForm" (ngSubmit)="guardar(form)">
+      <div class="campo">
+        <label>Nombre</label>
+        <input type="text" name="nombre" [(ngModel)]="modelo.nombre" required />
+      </div>
+
+      <div class="campo">
+        <label>Apellido</label>
+        <input type="text" name="apellido" [(ngModel)]="modelo.apellido" required />
+      </div>
+
+      <div class="campo">
+        <label>Email</label>
+        <input type="email" name="email" [(ngModel)]="modelo.email" required />
+      </div>
+
+      <div class="campo">
+        <label>Teléfono</label>
+        <input type="text" name="telefono" [(ngModel)]="modelo.telefono" />
+      </div>
+
+      <div class="campo">
+        <label>Rol</label>
+        <select name="rol" [(ngModel)]="modelo.rol" required>
+          <option value="USUARIO">Usuario</option>
+          <option value="ADMIN">Admin</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label>
+          <input type="checkbox" name="activo" [(ngModel)]="modelo.activo" />
+          Activo
+        </label>
+      </div>
+
+      <div class="botones">
+        <button type="submit" [disabled]="loading">
+          {{ usuario ? 'Actualizar' : 'Crear' }}
+        </button>
+        <button type="button" (click)="cerrar()" [disabled]="loading">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>

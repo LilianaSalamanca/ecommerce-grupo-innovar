@@ -1,0 +1,172 @@
+<div class="productos-container">
+
+  <div class="header">
+    <h2>Gestión de Productos</h2>
+    <button class="btn-primary" (click)="abrirModal()">+ Nuevo Producto</button>
+  </div>
+
+  <div class="filtro-productos">
+
+    <input 
+      type="text"
+      placeholder="Buscar producto por nombre"
+      [(ngModel)]="filtroNombre"
+      (input)="filtrarProductos()">
+
+  </div>
+
+  <!-- MENSAJES -->
+  <div *ngIf="message"
+        class="toast-message"
+        [class.success]="messageType === 'success'"
+        [class.error]="messageType === 'error'">
+
+      {{ message }}
+
+    </div>
+
+  <div *ngIf="loading" class="loading">Cargando productos...</div>
+
+  <table *ngIf="!loading">
+    <thead>
+      <tr>
+        <th>Imagen</th>
+        <th>Nombre</th>
+        <th>Referencia</th>
+        <th>Marca</th>
+        <th>Precio Público</th>
+        <th>Precio Mayorista</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let producto of productos">
+        <td>
+          <img [src]="'assets/' + producto.imagenDestacada" class="producto-img">
+        </td>
+
+        <td>{{producto.nombre}}</td>
+        <td>{{producto.referencia}}</td>
+        <td>{{producto.marca}}</td>
+        <td>${{producto.precioPublico}}</td>
+        <td>${{producto.precioMayorista}}</td>
+
+        <td class="acciones">
+          <button class="btn-details" (click)="abrirModalDetalles(producto)">Detalles</button>
+          <button class="btn-edit" (click)="editarProducto(producto)">Editar</button>
+          <button class="btn-delete" (click)="solicitarConfirmacionEliminar(producto)">Eliminar</button>
+        </td>
+
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- PAGINACIÓN -->
+  <div class="paginacion-simple">
+
+    <button 
+      class="btn-page"
+      (click)="cambiarPagina(paginaActual - 1)"
+      [disabled]="paginaActual === 1">
+      ← Anterior
+    </button>
+
+    <span class="page-info">
+      Página {{ paginaActual }} de {{ totalPaginas }}
+    </span>
+
+    <button 
+      class="btn-page"
+      (click)="cambiarPagina(paginaActual + 1)"
+      [disabled]="paginaActual === totalPaginas">
+      Siguiente →
+    </button>
+
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal" *ngIf="modalAbierto">
+    <div class="modal-content">
+
+      <h3>{{ editandoProducto ? 'Editar Producto' : 'Nuevo Producto' }}</h3>
+
+      <label>Referencia *</label>
+      <input [(ngModel)]="nuevoProducto.referencia" required>
+
+      <label>Nombre *</label>
+      <input [(ngModel)]="nuevoProducto.nombre" required>
+
+      <label>Descripción *</label>
+      <textarea [(ngModel)]="nuevoProducto.descripcion" required></textarea>
+
+      <label>Marca *</label>
+      <input [(ngModel)]="nuevoProducto.marca" required>
+
+      <label>Precio Público *</label>
+      <input type="number" [(ngModel)]="nuevoProducto.precioPublico" required>
+
+      <label>Precio Mayorista *</label>
+      <input type="number" [(ngModel)]="nuevoProducto.precioMayorista" required>
+
+      <label>Stock *</label>
+      <input type="number" [(ngModel)]="nuevoProducto.stock" required>
+
+      <label>Imagen del producto</label>
+      <input type="file" (change)="seleccionarImagen($event)">
+
+      <!-- preview -->
+      <img *ngIf="previewImagen" 
+          [src]="previewImagen" 
+          class="preview-img">
+
+      <label>Categoría</label>
+      <select [(ngModel)]="nuevoProducto.categoria">
+        <option *ngFor="let c of categorias" [ngValue]="c">
+          {{ c.nombre }}
+        </option>
+      </select>
+
+      <label>Subcategoría</label>
+      <select [(ngModel)]="nuevoProducto.subcategoria">
+        <option *ngFor="let sc of subcategorias" [ngValue]="sc">
+          {{ sc.nombre }}
+        </option>
+      </select>
+
+      <div class="acciones-modal">
+        <button class="btn-cancel" (click)="cerrarModal()">Cancelar</button>
+
+        <button class="btn-primary"
+            (click)="guardarProducto()"
+            [disabled]="!nuevoProducto.nombre ||
+                        !nuevoProducto.referencia ||
+                        !nuevoProducto.descripcion ||
+                        !nuevoProducto.marca">
+            {{ editandoProducto ? 'Guardar cambios' : 'Crear producto' }}
+          </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<app-producto-detalles
+  [producto]="productoDetalle"
+  [abierto]="modalDetallesAbierto"
+  (cerrar)="cerrarModalDetalles()">
+</app-producto-detalles>
+
+<!-- MODAL CONFIRMACIÓN -->
+<div class="modal-overlay" *ngIf="modalConfirmacionAbierto">
+  <div class="modal-confirmacion">
+    <h3>Confirmación</h3>
+    <p>{{ mensajeConfirmacion }}</p>
+
+    <div class="acciones-modal">
+      <button class="btn-cancel" (click)="cerrarModalConfirmacion()">Cancelar</button>
+      <button class="btn-primary btn-delete" (click)="confirmarEliminar()">Eliminar</button>
+    </div>
+  </div>
+</div>

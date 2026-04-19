@@ -1,0 +1,37 @@
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <h2 class="title">Bienvenido</h2>
+    <p class="subtitle">Inicia sesión para continuar</p>
+
+    <form (ngSubmit)="login()" class="form" novalidate>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" [(ngModel)]="email" name="email" placeholder="ejemplo@correo.com" required />
+      </div>
+
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" [(ngModel)]="password" name="password" placeholder="•••••••••" required />
+      </div>
+
+      <button class="btn-primary" type="submit" [disabled]="loading">
+        <span *ngIf="!loading">Ingresar</span>
+        <span *ngIf="loading">Ingresando...</span>
+      </button>
+    </form>
+
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+    <div class="divider"><span>o</span></div>
+
+    <button class="btn-google" (click)="loginWithGoogle()" [disabled]="loading">
+      <img src="assets/google.svg" alt="google" />
+      Continuar con Google
+    </button>
+
+    <p class="register-link">
+      ¿No tienes cuenta?
+      <a routerLink="/register">Crear cuenta</a>
+    </p>
+  </div>
+</div>

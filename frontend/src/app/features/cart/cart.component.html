@@ -1,0 +1,176 @@
+<div class="cart-container">
+  <h2>🛒 Carrito de compras</h2>
+
+  <div *ngIf="carrito.length === 0" class="vacio">
+    Tu carrito está vacío.
+  </div>
+
+  <!-- Avisos -->
+  <div class="avisos-promociones" *ngIf="carrito.length > 0">
+    
+    <div class="aviso-mayorista">
+      ¡Lleva 5 o más unidades del mismo producto y obtén
+      <strong>precio mayorista</strong>!
+    </div>
+
+    <!-- ENVÍO -->
+    <div class="aviso-envio" [class.cumple-envio]="envioGratis()">
+
+      <!-- GRATIS -->
+      <span *ngIf="envioGratis()">
+        🎉 ¡Tu envío será <strong>GRATIS</strong>!
+      </span>
+
+      <!-- MAYORISTA SIN CUMPLIR -->
+      <span *ngIf="!envioGratis() && tieneMayorista()">
+        Envío gratis para mayoristas por compras superiores a 
+        <strong>$600.000 COP</strong><br>
+        Te faltan {{ faltanteEnvio() | currency:'COP' }} para envío gratis
+      </span>
+
+    </div>
+
+    <!-- COMPRA MÍNIMA -->
+    <div *ngIf="!cumpleCompraMinima()" class="aviso-minimo">
+      ⚠️ El total mínimo para comprar es 
+      <strong>$50.000 COP</strong><br>
+      Te faltan {{ faltanteCompraMinima() | currency:'COP' }} para completar tu compra
+    </div>
+  </div>
+
+  <!-- MOBILE -->
+  <div *ngIf="pantallaPequena; else desktopView">
+    <div *ngFor="let item of carrito" class="producto-card">
+      <div class="producto-info">
+        <img [src]="'assets/' + item.producto.imagenDestacada">
+        <div>
+          <h4>{{ item.producto.nombre }}</h4>
+          <p>
+            {{ precioUnitario(item.producto, item.cantidad) | currency:'COP' }}
+          </p>
+        </div>
+      </div>
+
+      <div class="acciones">
+        <button (click)="decrementar(item.producto)">−</button>
+        <input
+          [value]="cantidades[item.producto.id!]"
+          (input)="onCantidadInput($any($event.target).value, item.producto)"
+          (blur)="onCantidadCommit(item.producto)"
+        />
+        <button (click)="incrementar(item.producto)">+</button>
+      </div>
+
+      <div class="subtotal">
+        Subtotal:
+        {{ precioTotal(item.producto, item.cantidad) | currency:'COP' }}
+      </div>
+
+      <button class="btn-eliminar" (click)="eliminar(item.producto.id!)">
+        Eliminar
+      </button>
+    </div>
+  </div>
+
+  <!-- DESKTOP -->
+  <ng-template #desktopView>
+    <table class="tabla-carrito">
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Precio</th>
+          <th>Total</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let item of carrito">
+          <td class="producto-card">
+            <img [src]="'assets/' + item.producto.imagenDestacada">
+            {{ item.producto.nombre }}
+          </td>
+
+          <td>
+            <div class="qty-control">
+              <button (click)="decrementar(item.producto)">−</button>
+              <input
+                [value]="cantidades[item.producto.id!]"
+                (input)="onCantidadInput($any($event.target).value, item.producto)"
+                (blur)="onCantidadCommit(item.producto)"
+              />
+              <button (click)="incrementar(item.producto)">+</button>
+            </div>
+          </td>
+
+          <td>
+            {{ precioUnitario(item.producto, item.cantidad) | currency:'COP ' }}
+          </td>
+
+          <td>
+            {{ precioTotal(item.producto, item.cantidad) | currency:'COP ' }}
+          </td>
+
+          <td>
+            <button class="btn-eliminar" (click)="eliminar(item.producto.id!)">
+              ✕
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-template>
+
+  <!-- RESUMEN 🔥 ACTUALIZADO -->
+  <div class="resumen" *ngIf="carrito.length > 0">
+
+    <div class="linea-resumen">
+      <span>Subtotal:</span>
+      <span>{{ total() | currency:'COP ' }}</span>
+    </div>
+
+    <div class="linea-resumen">
+      <span>Envío:</span>
+
+      <span *ngIf="envioGratis(); else conCosto">
+        GRATIS
+      </span>
+
+      <ng-template #conCosto>
+        {{ costoEnvio() | currency:'COP ' }}
+      </ng-template>
+    </div>
+
+    <h3 class="total-final">
+      Total: {{ totalConEnvio() | currency:'COP ' }}
+    </h3>
+
+    <button class="btn-vaciar" (click)="limpiar()">Vaciar</button>
+
+    <button
+      class="btn-pagar"
+      (click)="continuarCompra()"
+      [disabled]="!cumpleCompraMinima()">
+      Continuar compra
+    </button>
+
+  </div>
+
+  <!-- RELACIONADOS -->
+  <div class="productos-relacionados" *ngIf="productosRelacionados.length > 0">
+    <h3>Productos relacionados</h3>
+
+    <div class="cards-relacionadas">
+      <div class="producto-card" *ngFor="let p of productosRelacionados">
+        <img [src]="'assets/' + p.imagenDestacada">
+        <h4>{{ p.nombre }}</h4>
+        <p>{{ p.precioPublico | currency:'COP' }}</p>
+        <button (click)="agregarRelacionado(p)">
+          Agregar
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

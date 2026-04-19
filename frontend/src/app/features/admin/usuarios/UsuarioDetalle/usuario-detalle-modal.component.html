@@ -1,0 +1,64 @@
+<div class="overlay">
+
+  <div class="modal">
+
+    <div class="header">
+      <h3>Detalles del Usuario</h3>
+      <button class="btn-close" (click)="cerrar()">✕</button>
+    </div>
+
+    <div class="contenido">
+
+      <div class="fila">
+        <span class="label">Nombre</span>
+        <span>{{ usuario?.nombre }} {{ usuario?.apellido }}</span>
+      </div>
+
+      <div class="fila">
+        <span class="label">Email</span>
+        <span>{{ usuario?.email }}</span>
+      </div>
+
+      <div class="fila">
+        <span class="label">Rol</span>
+        <span>{{ usuario?.rol }}</span>
+      </div>
+
+      <div class="fila">
+        <span class="label">Estado</span>
+        <span>
+          {{ usuario?.activo ? 'Activo' : 'Inactivo' }}
+        </span>
+      </div>
+
+      <div class="fila">
+        <span class="label">Tipo usuario</span>
+        <span>{{ usuario?.tipoUsuario }}</span>
+      </div>
+
+      <div class="fila">
+        <span class="label">Invitado</span>
+        <span>{{ usuario?.invitado ? 'Sí' : 'No' }}</span>
+      </div>
+
+      <div class="fila">
+        <span class="label">Fecha registro</span>
+        <span>{{ usuario?.fechaRegistro | date:'dd/MM/yyyy HH:mm' }}</span>
+      </div>
+
+      <div class="fila">
+        <span class="label">Último login</span>
+        <span>
+          {{ usuario?.ultimoLogin ? (usuario?.ultimoLogin | date:'dd/MM/yyyy HH:mm') : 'Nunca' }}
+        </span>
+      </div>
+
+    </div>
+
+    <div class="footer">
+      <button class="btn-cerrar" (click)="cerrar()">Cerrar</button>
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,45 @@
+<div class="products-container">
+
+  <!-- BOTÓN DE CAMBIO DE PRECIO -->
+  <div class="contenedor-precios">
+    <button class="toggle-precio" (click)="toggleMayorista()">
+      {{ mostrarMayoristas ? 'Ver precios públicos' : 'Ver precios mayoristas' }}
+    </button>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filters">
+    <div class="filter">
+      <label for="categoria">Categoría:</label>
+      <select id="categoria" [(ngModel)]="categoriaSeleccionada" 
+              (change)="onCategoriaChange(categoriaSeleccionada)">
+        <option [ngValue]="null">Todas las categorías</option>
+        <option *ngFor="let c of categorias" [ngValue]="c.id">
+          {{ c.nombre }}
+        </option>
+      </select>
+    </div>
+
+    <div class="filter">
+      <label for="subcategoria">Subcategoría:</label>
+        <select id="subcategoria" [(ngModel)]="subcategoriaSeleccionada"
+                (change)="onSubcategoriaChange(subcategoriaSeleccionada)">
+          <option [ngValue]="null">Todas las subcategorías</option>
+          <option *ngFor="let s of subcategoriasFiltradas" [ngValue]="s.id">
+            {{ s.nombre }}
+          </option>
+        </select>
+    </div>
+
+  </div>
+
+  <!-- Lista de productos -->
+  <div class="grid">
+    <app-product-card
+      *ngFor="let p of productosFiltrados"
+      [producto]="p"
+      [mostrarMayoristas]="mostrarMayoristas">
+    </app-product-card>
+  </div>
+
+</div>

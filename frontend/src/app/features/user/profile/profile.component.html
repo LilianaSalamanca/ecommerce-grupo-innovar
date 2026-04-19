@@ -1,0 +1,86 @@
+<div class="profile-container">
+
+  <button class="back-btn" (click)="goBack()">
+    ← Volver
+  </button>
+
+  <h2 class="title">Mi Perfil</h2>
+  <p class="subtitle">Actualiza tu información personal</p>
+
+  <!-- Mensaje éxito -->
+  <div *ngIf="message" class="alert success">
+    {{ message }}
+  </div>
+
+  <!-- Mensaje error -->
+  <div *ngIf="errorMessage" class="alert error">
+    {{ errorMessage }}
+  </div>
+
+  <div class="profile-card">
+
+    <div class="avatar-section">
+      <div class="avatar">
+        <span>{{ profileForm.get('nombre')?.value?.charAt(0) }}</span>
+      </div>
+    </div>
+
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+
+      <div class="form-grid">
+
+        <!-- NOMBRE -->
+        <div class="form-group">
+          <label for="nombre">Nombre</label>
+          <input id="nombre" type="text" formControlName="nombre"
+                 [class.error]="profileForm.get('nombre')?.invalid && profileForm.get('nombre')?.touched">
+        </div>
+
+        <!-- APELLIDO -->
+        <div class="form-group">
+          <label for="apellido">Apellido</label>
+          <input id="apellido" type="text" formControlName="apellido"
+                 [class.error]="profileForm.get('apellido')?.invalid && profileForm.get('apellido')?.touched">
+        </div>
+
+        <!-- EMAIL -->
+        <div class="form-group full">
+          <label for="email">Correo electrónico</label>
+          <input id="email" type="email" formControlName="email" class="disabled">
+        </div>
+
+        <!-- TELÉFONO -->
+        <div class="form-group full">
+          <label for="telefono">Teléfono</label>
+          <input id="telefono" type="text" formControlName="telefono">
+        </div>
+
+        <!-- DIRECCIÓN -->
+        <div class="form-group full">
+          <label for="direccion">Dirección</label>
+          <input id="direccion" type="text" formControlName="direccion">
+        </div>
+
+        <!-- CIUDAD -->
+        <div class="form-group">
+          <label for="ciudad">Ciudad</label>
+          <input id="ciudad" type="text" formControlName="ciudad">
+        </div>
+
+        <!-- DEPARTAMENTO -->
+        <div class="form-group">
+          <label for="departamento">Departamento</label>
+          <input id="departamento" type="text" formControlName="departamento">
+        </div>
+
+      </div>
+
+      <button type="submit" class="btn-save" [disabled]="loading">
+        {{ loading ? 'Guardando...' : 'Guardar cambios' }}
+      </button>
+
+    </form>
+
+  </div>
+
+</div>

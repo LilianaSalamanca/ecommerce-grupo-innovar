@@ -1,0 +1,211 @@
+.container {
+  max-width: 1100px;
+  margin: 70px auto;
+  padding: 24px;
+  font-family: 'Inter', system-ui;
+}
+
+/* BACK */
+.back-btn {
+  border: none;
+  background: none;
+  color: #666;
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 20px;
+
+  &:hover {
+    color: #000;
+  }
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+}
+
+.header-info h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.fecha {
+  font-size: 0.85rem;
+  color: #757575;
+}
+
+/* STATUS */
+.status-group {
+  display: flex;
+  gap: 20px;
+}
+
+.status-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 0.7rem;
+  color: #494949;
+  text-transform: uppercase;
+}
+
+/* BADGES */
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* DOT */
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+/* ESTADOS PEDIDO */
+.pendiente { background: #fff8e1; color: #b58100; }
+.procesando { background: #e3f2fd; color: #0d47a1; }
+.enviado { background: #e8f5e9; color: #1b5e20; }
+.completado { background: #e0f7fa; color: #006064; }
+.cancelado { background: #fdecea; color: #b71c1c; }
+
+/* ESTADOS PAGO */
+.aprobado { background: #e6f7ec; color: #1a7f37; }
+.rechazado { background: #fdecea; color: #b71c1c; }
+
+/* CARDS */
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 20px;
+  border: 1px solid #eee;
+
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.04),
+    0 10px 25px rgba(0,0,0,0.03);
+}
+
+/* PRODUCTOS */
+.productos .item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid #f3f3f3;
+}
+
+.productos img {
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.info {
+  flex: 1;
+}
+
+.meta {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.subtotal {
+  font-weight: 700;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* INFO BLOCK */
+.info-block {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+
+  span {
+    color: #666;
+    font-size: 0.85rem;
+  }
+
+  b {
+    font-weight: 600;
+  }
+}
+
+/* CLIENTE */
+.cliente {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+/* TOTAL */
+.total {
+  background: linear-gradient(135deg, #fafafa, #fff);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.total-row {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.divider {
+  height: 1px;
+  background: #eee;
+  margin: 10px 0;
+}
+
+/* BOTÓN */
+.btn-pago {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.btn-pago:hover {
+  background: #222;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .status-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

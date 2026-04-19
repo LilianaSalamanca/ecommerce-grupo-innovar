@@ -1,0 +1,24 @@
+<div class="modal" *ngIf="abierto">
+  <div class="modal-content">
+    <h3>Detalles de {{ producto?.nombre }}</h3>
+
+    <img [src]="producto?.imagenDestacada" 
+         alt="{{ producto?.nombre }}" 
+         class="detalle-img">
+
+    <div class="detalle-info">
+      <p><strong>Referencia:</strong> {{ producto?.referencia }}</p>
+      <p><strong>Marca:</strong> {{ producto?.marca }}</p>
+      <p><strong>Precio Público:</strong> ${{ producto?.precioPublico }}</p>
+      <p><strong>Precio Mayorista:</strong> ${{ producto?.precioMayorista }}</p>
+      <p><strong>Stock:</strong> {{ producto?.stock }}</p>
+      <p><strong>Categoría:</strong> {{ producto?.categoria?.nombre || '-' }}</p>
+    <p><strong>Subcategoría:</strong> {{ producto?.subcategoria?.nombre || '-' }}</p>
+      <p><strong>Descripción:</strong> {{ producto?.descripcion }}</p>
+    </div>
+
+    <div class="acciones-modal">
+      <button class="btn-cancel" (click)="cerrarModal()">Cerrar</button>
+    </div>
+  </div>
+</div>

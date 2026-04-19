@@ -1,0 +1,33 @@
+<section class="faq">
+
+  <div class="faq-container">
+
+    <h1>Preguntas frecuentes</h1>
+    <p class="faq-subtitle">
+      Resolvemos las dudas más comunes sobre nuestros productos y servicios
+    </p>
+
+    <div class="faq-list">
+
+      <div 
+        class="faq-item"
+        *ngFor="let item of faqs; let i = index"
+        (click)="toggle(i)"
+        [class.active]="activeIndex === i">
+
+        <div class="faq-question">
+          <span>{{ item.question }}</span>
+          <span class="icon">{{ activeIndex === i ? '−' : '+' }}</span>
+        </div>
+
+        <div class="faq-answer" *ngIf="activeIndex === i">
+          {{ item.answer }}
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>

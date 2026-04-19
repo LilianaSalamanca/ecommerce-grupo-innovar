@@ -1,0 +1,200 @@
+<div class="dashboard-container" *ngIf="metrics; else loading">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <h1>Dashboard</h1>
+      <p>Resumen en tiempo real de tu negocio</p>
+    </div>
+  </div>
+
+  <!-- KPI CARDS -->
+  <div class="kpi-grid">
+
+    <div class="kpi-card" (click)="irAPedidos('hoy')">
+      <span>Ventas Hoy</span>
+      <h2>{{ metrics.ventasHoy || 0 | number }}</h2>
+      <p class="sub">Hoy</p>
+    </div>
+
+    <div class="kpi-card" (click)="irAPedidos('mes')">
+      <span>Ventas Mes</span>
+      <h2>{{ metrics.ventasMes | number }}</h2>
+      <p class="sub">Mes actual</p>
+    </div>
+
+    <div class="kpi-card alert" (click)="irAPedidos('pendientes')">
+      <span>Requieren acción</span>
+      <h2>{{ metrics.pedidosPendientes }}</h2>
+      <p class="sub">Pedidos pendientes</p>
+    </div>
+
+    <div class="kpi-card success" (click)="abrirTicketModal()">
+      <span>Ticket Histórico</span>
+      <h2>{{ metrics.ticketPromedio | number:'1.0-0' }}</h2>
+      <p class="sub">Promedio total</p>
+    </div>
+
+  </div>
+
+  <!-- GRID SECUNDARIO -->
+  <div class="secondary-grid">
+
+    <div class="card">
+      <h3>Estado del sistema</h3>
+      <p>Usuarios: {{ metrics.totalUsuarios }}</p>
+      <p>Productos: {{ metrics.totalProductos }}</p>
+    </div>
+
+    <div class="card alert" *ngIf="metrics.productosSinStock > 0">
+      <h3>⚠ Alertas</h3>
+      <p>{{ metrics.productosSinStock }} productos sin stock</p>
+    </div>
+
+  </div>
+
+  <!-- ESTADO DE PEDIDOS -->
+  <div class="card estado-pedidos">
+
+    <h3>Estado de pedidos</h3>
+
+    <div class="estado-grid">
+
+      <div class="estado-item pendiente" (click)="irAPedidosEstado('PENDIENTE')">
+        <span>Pendientes</span>
+        <strong>{{ metrics.pendientes }}</strong>
+      </div>
+
+      <div class="estado-item procesando" (click)="irAPedidosEstado('PROCESANDO')">
+        <span>Procesando</span>
+        <strong>{{ metrics.procesando }}</strong>
+      </div>
+
+      <div class="estado-item enviado" (click)="irAPedidosEstado('ENVIADO')">
+        <span>Enviados</span>
+        <strong>{{ metrics.enviados }}</strong>
+      </div>
+
+      <div class="estado-item completado" (click)="irAPedidosEstado('COMPLETADO')">
+        <span>Completados</span>
+        <strong>{{ metrics.completados }}</strong>
+      </div>
+
+      <div class="estado-item cancelado" (click)="irAPedidosEstado('CANCELADO')">
+        <span>Cancelados</span>
+        <strong>{{ metrics.cancelados }}</strong>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="bottom-grid">
+
+    <!-- ÚLTIMOS PEDIDOS -->
+    <div class="card ultimos-pedidos" *ngIf="ultimosPedidos.length">
+
+      <h3>Últimos pedidos</h3>
+
+      <div *ngFor="let p of ultimosPedidos" class="pedido-item">
+
+        <div class="pedido-info">
+          <span class="id">#{{ p.id }}</span>
+
+          <span class="fecha">
+            {{ p.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}
+          </span>
+        </div>
+
+        <div class="pedido-total">
+          {{ p.total | number }}
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- TOP PRODUCTOS -->
+    <div class="card top-productos" *ngIf="topProductos.length">
+      <h3>Top productos</h3>
+
+      <div *ngFor="let prod of topProductos" class="producto-item">
+
+        <div class="info">
+          <span class="nombre">{{ prod.nombre }}</span>
+
+          <div class="barra">
+            <div class="relleno"
+                [style.width.%]="(prod.cantidad / topProductos[0].cantidad) * 100">
+            </div>
+          </div>
+        </div>
+
+        <span class="cantidad">{{ prod.cantidad }}</span>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- LOADING -->
+<ng-template #loading>
+  <div class="dashboard-container">
+    <h1>Cargando métricas...</h1>
+  </div>
+</ng-template>
+
+<!-- MODAL -->
+<div class="modal-overlay" *ngIf="mostrarTicketModal">
+
+  <div class="modal-content">
+
+    <div class="modal-header">
+      <h3>📊 Análisis Ticket Promedio</h3>
+      <button class="close-btn" (click)="cerrarTicketModal()">✕</button>
+    </div>
+
+    <div class="stats-grid">
+
+      <div class="stat">
+        <span>Ticket Hoy</span>
+        <h2>{{ ticketData.hoy | number:'1.0-0' }}</h2>
+      </div>
+
+      <div class="stat">
+        <span>Ticket Mes</span>
+        <h2>{{ ticketData.mes | number:'1.0-0' }}</h2>
+      </div>
+
+      <div class="stat">
+        <span>Total Ventas</span>
+        <h2>{{ ticketData.totalVentas | number }}</h2>
+      </div>
+
+      <div class="stat">
+        <span>Total Pedidos Mes</span>
+        <h2>{{ ticketData.totalPedidos }}</h2>
+      </div>
+
+    </div>
+
+    <div class="variacion"
+         [ngClass]="{
+           'positivo': ticketData.variacion > 0,
+           'negativo': ticketData.variacion < 0,
+           'neutro': ticketData.variacion === 0
+         }">
+
+      <span *ngIf="ticketData.totalPedidos > 0">
+        {{ ticketData.variacion > 0 ? '↑' : ticketData.variacion < 0 ? '↓' : '→' }}
+        {{ ticketData.variacion | number:'1.0-1' }}%
+        vs promedio actual del mes
+      </span>
+
+    </div>
+
+  </div>
+
+</div>

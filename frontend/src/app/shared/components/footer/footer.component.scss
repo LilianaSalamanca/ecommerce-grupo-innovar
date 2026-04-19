@@ -1,0 +1,142 @@
+.footer {
+  background: linear-gradient(135deg, #020617, #0f172a);
+  color: #e2e8f0;
+  font-size: 13px;
+  margin-top: 50px;
+
+  &-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 28px 20px;
+    display: grid;
+    grid-template-columns: 1.8fr 1.5fr 1.2fr;
+    gap: 20px;
+    align-items: start;
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+      gap: 25px;
+      text-align: center;
+    }
+  }
+
+  /* BRAND */
+  &-brand {
+    h2 {
+      font-size: 18px;
+      color: #ff6600;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    p {
+      color: #94a3b8;
+      line-height: 1.4;
+      max-width: 380px;
+      margin-bottom: 10px;
+    }
+  }
+
+  /* TRUST */
+  .trust {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-size: 11.5px;
+    color: #22c55e;
+  }
+
+  /* LINKS */
+  &-links {
+    display: flex;
+    gap: 25px;
+
+    @media (max-width: 900px) {
+      justify-content: center;
+    }
+
+    .link-group {
+      h4 {
+        font-size: 12.5px;
+        margin-bottom: 8px;
+        color: #ff6600;
+        font-weight: 600;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      li {
+        margin-bottom: 4px;
+      }
+
+      a {
+        text-decoration: none;
+        color: #cbd5f5;
+        transition: all 0.2s ease;
+
+        &:hover {
+          color: #ff6600;
+          padding-left: 2px;
+        }
+      }
+    }
+  }
+
+  .contact-info {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    .contact-link {
+      color: #cbd5f5;
+      text-decoration: none;
+      font-size: 12px;
+      transition: all 0.2s ease;
+
+      &:hover {
+        color: #ff6600;
+        padding-left: 2px;
+      }
+    }
+  }
+
+  /* BOTÓN WHATSAPP */
+  .whatsapp-btn {
+    display: inline-block;
+    background: #25D366;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(255, 102, 0, 0.25);
+
+    &:hover {
+      background: #1ebe5d;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 14px rgba(255, 102, 0, 0.35);
+    }
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: rgba(255, 102, 0, 0.2);
+    margin: 6px 20px;
+  }
+
+  /* BOTTOM */
+  &-bottom {
+    text-align: center;
+    padding: 10px;
+    font-size: 11.5px;
+    color: #64748b;
+  }
+}

@@ -1,0 +1,65 @@
+<footer class="footer" role="contentinfo">
+
+  <div class="footer-container">
+
+    <!-- BRAND -->
+    <div class="footer-brand">
+      <h2>{{ footer.companyName }}</h2>
+      <p>{{ footer.description }}</p>
+
+      <div class="trust">
+        <span>🔒 Pagos seguros</span>
+        <span>🚚 Envíos garantizados</span>
+        <span>🛡️ Protección al comprador</span>
+      </div>
+    </div>
+
+    <!-- LINKS -->
+    <div class="footer-links">
+      <div class="link-group" *ngFor="let group of footer.linkGroups">
+        <h4>{{ group.title }}</h4>
+        <ul>
+          <li *ngFor="let link of group.links">
+            <a [routerLink]="link.url">{{ link.label }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- CONTACTO -->
+    <div class="footer-contact">
+      <h4>Atención</h4>
+
+      <!-- WhatsApp -->
+      <app-whatsapp-button></app-whatsapp-button>
+
+      <p class="availability">Respuesta rápida</p>
+
+      <div class="contact-info">
+
+        <!-- EMAIL -->
+        <a 
+          [href]="'mailto:' + footer.realEmail + '?subject=Consulta Grupo Innovar&body=Hola, quiero más información'"
+          class="contact-link">
+          {{ footer.email }}
+        </a>
+
+        <!-- TELÉFONO -->
+        <a 
+          [href]="'tel:' + footer.phone"
+          class="contact-link">
+          {{ footer.phone }}
+        </a>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="footer-bottom">
+    <p>© {{ year }} {{ footer.companyName }}</p>
+  </div>
+
+</footer>

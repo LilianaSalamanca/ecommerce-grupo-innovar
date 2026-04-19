@@ -1,0 +1,62 @@
+<section class="contact">
+
+  <div class="contact-container">
+
+    <h1>Contacto</h1>
+
+    <p class="contact-subtitle">
+      Escríbenos por WhatsApp o envíanos tu solicitud desde el formulario
+    </p>
+
+    <div class="contact-grid">
+
+      <!-- FORM -->
+      <form class="contact-form" [formGroup]="contactForm" (ngSubmit)="sendMessage()">
+
+        <input type="text" formControlName="name" placeholder="Tu nombre" />
+
+        <input type="email" formControlName="email" placeholder="Tu correo" />
+
+        <select formControlName="reason">
+          <option value="pedido">Soporte de pedido</option>
+          <option value="pago">Pagos / Wompi</option>
+          <option value="devolucion">Devoluciones</option>
+          <option value="wallet">Wallet</option>
+          <option value="otro">Otro</option>
+        </select>
+
+        <textarea rows="5" formControlName="message" placeholder="Escribe tu mensaje..."></textarea>
+
+        <button type="submit" [disabled]="contactForm.invalid">
+          Enviar por WhatsApp
+        </button>
+
+        <p class="success" *ngIf="isSent">
+          ✔ Redirigiendo a WhatsApp...
+        </p>
+
+      </form>
+
+      <!-- INFO -->
+      <div class="contact-info">
+
+        <div class="info-card">
+          <h3>Email</h3>
+          <p>soporte@grupoinnovar.com</p>
+          <button type="button" (click)="openEmail()">
+            Enviar correo
+          </button>
+        </div>
+
+        <div class="info-card">
+          <h3>Tiempo de respuesta</h3>
+          <p>Menos de 24 horas hábiles</p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>

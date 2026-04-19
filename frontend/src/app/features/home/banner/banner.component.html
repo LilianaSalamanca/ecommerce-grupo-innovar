@@ -1,0 +1,52 @@
+<!-- BANNER -->
+<section class="banner" *ngIf="!cargando">
+
+  <!-- ====== TEXTO IZQUIERDO ====== -->
+  <div class="banner-left">
+    <h1>
+      {{ mostrandoPromociones ? 'Promociones Especiales' : 'Productos Destacados' }}
+    </h1>
+
+    <p>
+      {{ mostrandoPromociones
+          ? 'Aprovecha nuestras promociones por tiempo limitado.'
+          : 'Los productos más populares y mejor valorados por nuestros clientes.' }}
+    </p>
+
+  </div>
+
+  <!-- ====== LADO DERECHO ====== -->
+  <div class="banner-right">
+
+    <!-- PROMOCIONES -->
+    <div class="promo-slider" *ngIf="mostrandoPromociones && promociones.length > 0">
+        <div class="promo-card" *ngFor="let promo of promociones">
+            <img [src]="'assets/' + promo.imagenDestacada" [alt]="promo.nombre">
+            <h3>{{ promo.nombre }}</h3>
+            <p>{{ promo.descripcion }}</p>
+        </div>
+    </div>
+
+    <!-- PRODUCTOS DESTACADOS -->
+    <div class="productos-destacados" *ngIf="!mostrandoPromociones && productosDestacados.length > 0">
+      <div class="producto-card" *ngFor="let producto of productosDestacados">
+        <img [src]="'assets/' + producto.imagenDestacada" [alt]="producto.nombre">
+
+        <h3>{{ producto.nombre }}</h3>
+        <p>{{ producto.precioPublico | currency:'COP':'symbol' }}</p>
+      </div>
+    </div>
+
+    <!-- MENSAJE SI NO HAY CONTENIDO -->
+    <div class="sin-contenido" *ngIf="productosDestacados.length === 0 && promociones.length === 0">
+      <p>No hay promociones ni productos destacados disponibles en este momento.</p>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- CARGANDO -->
+<div class="banner-loading" *ngIf="cargando">
+  <span>Cargando banner...</span>
+</div>

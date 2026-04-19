@@ -1,0 +1,115 @@
+<div class="usuarios-container">
+
+  <!-- Mensaje -->
+  <div *ngIf="message" class="mensaje" [ngClass]="messageType">
+    {{ message }}
+  </div>
+
+  <div class="usuarios-panel">
+
+    <!-- Header -->
+    <div class="header">
+      <h2>Gestión de Usuarios</h2>
+      <button class="btn btn-primary" (click)="editarUsuario(null)">+ Nuevo Usuario</button>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filtros">
+      <input type="text"
+             placeholder="Buscar usuario por correo"
+             [(ngModel)]="filtros.email"
+             (ngModelChange)="onFiltroCambio()"
+             class="input-filtro">
+
+      <select [(ngModel)]="filtros.rol"
+              (ngModelChange)="onFiltroCambio()"
+              class="select-filtro">
+        <option value="">Todos los roles</option>
+        <option value="ADMIN">Admin</option>
+        <option value="USUARIO">Usuario</option>
+      </select>
+
+      <select [(ngModel)]="filtros.estado"
+              (ngModelChange)="onFiltroCambio()"
+              class="select-filtro">
+        <option value="">Todos los estados</option>
+        <option value="true">Activo</option>
+        <option value="false">Inactivo</option>
+      </select>
+
+      <button class="btn btn-secondary" (click)="limpiarFiltros()">Limpiar filtros</button>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="loading">Cargando usuarios...</div>
+
+    <!-- Tabla -->
+    <table *ngIf="!loading && usuarios.length" class="tabla-usuarios">
+      <thead>
+        <tr>
+          <th class="col-nombre">Nombre</th>
+          <th class="col-email">Email</th>
+          <th>Rol</th>
+          <th>Estado</th>
+          <th>Último login</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of usuarios">
+          <td class="col-nombre">{{ user.nombre }} {{ user.apellido }}</td>
+          <td class="col-email">{{ user.email }}</td>
+          <td>{{ user.rol }}</td>
+          <td>
+            <span class="estado" [ngClass]="{'activo': user.activo, 'inactivo': !user.activo}">
+              {{ user.activo ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+          <td>{{ user.ultimoLogin ? (user.ultimoLogin | date:'dd/MM/yyyy HH:mm') : '-' }}</td>
+          
+          <td class="acciones">
+            <button class="btn-view" (click)="verDetalles(user)">Ver</button>
+            <button class="btn-edit" (click)="editarUsuario(user)">Editar</button>
+            <button 
+              class="btn-delete" 
+              [ngClass]="{'btn-activar': !user.activo}" 
+              (click)="cambiarEstado(user)">
+              {{ user.activo ? 'Desactivar' : 'Reactivar' }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!loading && !usuarios.length" class="sin-datos">
+      No hay usuarios que mostrar.
+    </div>
+
+    <!-- Paginación -->
+    <div *ngIf="totalPaginas > 1" class="paginacion">
+      <button class="btn-pag" (click)="anteriorPagina()" [disabled]="pageNumber === 0">← Anterior</button>
+      <span class="info-pag">Página {{ pageNumber + 1 }} de {{ totalPaginas }}</span>
+      <button class="btn-pag" (click)="siguientePagina()" [disabled]="pageNumber + 1 === totalPaginas">Siguiente →</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Mensaje flotante -->
+<div *ngIf="message" class="mensaje" [ngClass]="messageType">
+  {{ message }}
+</div>
+
+<!-- Modal -->
+<app-usuario-modal
+  *ngIf="modalVisible"
+  [usuario]="usuarioSeleccionado"
+  (onGuardar)="onUsuarioGuardado($event)"
+  (onCerrar)="modalVisible = false">
+</app-usuario-modal>
+
+<app-usuario-detalle-modal
+  *ngIf="modalDetalleVisible"
+  [usuario]="usuarioDetalle"
+  (onCerrar)="modalDetalleVisible = false">
+</app-usuario-detalle-modal>

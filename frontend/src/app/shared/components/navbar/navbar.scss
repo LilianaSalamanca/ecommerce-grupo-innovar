@@ -1,0 +1,241 @@
+.navbar {
+  background-color: #ff6600;
+  color: #ffffff;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+  font-family: Arial, sans-serif;
+  max-width: 100vw;
+  overflow-x: hidden;
+  overflow: visible;
+  justify-content: space-between;
+  align-items: center;
+
+  .nav-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 0.7rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    /* LOGO */
+    .logo img {
+      height: 55px;
+      width: auto;
+      transition: 0.2s ease;
+      &:hover { transform: scale(1.05); }
+    }
+
+    /* BOTÓN HAMBURGUESA (MÓVIL) */
+    .hamburger {
+      display: none;
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 28px;
+      cursor: pointer;
+      transition: 0.2s;
+      &:hover { transform: scale(1.1); }
+    }
+
+    /* MENÚ PRINCIPAL */
+    .menu {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem; 
+      flex: 1;
+      justify-content: space-between;
+
+      /* BUSCADOR */
+      .buscador {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex: 1;
+        max-width: 500px;
+        margin-left: 25rem;
+
+        .input-busqueda {
+          flex: 1;
+          padding: 0.55rem 1rem;
+          border-radius: 8px;
+          background: rgba(255, 255, 255, 0.18);
+          border: 1px solid rgba(255, 255, 255, 0.35);
+          color: white;
+          backdrop-filter: blur(4px);
+          &::placeholder { color: rgba(255, 255, 255, 0.75); }
+        }
+
+        i.fas.fa-search {
+          color: white;
+          font-size: 18px;
+          cursor: pointer;
+        }
+      }
+
+      /* ACCIONES */
+      .acciones {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        /* CARRITO */
+        .carrito {
+          position: relative;
+          font-size: 26px;
+          background: rgba(0, 0, 0, 0.25);
+          padding: 10px;
+          border-radius: 50%;
+          color: white;
+          transition: 0.2s;
+          &:hover { background: rgba(0, 0, 0, 0.38); transform: scale(1.08); }
+
+          .contador {
+            position: absolute;
+            top: 0;
+            right: 0;
+            transform: translate(50%, -50%);
+            background-color: red;
+            color: white;
+            font-size: 12px;
+            padding: 3px 6px;
+            border-radius: 50%;
+            font-weight: bold;
+          }
+        }
+
+        /* USUARIO LOGUEADO - Dropdown */
+        .usuario-menu {
+          position: relative;
+
+          .usuario-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            &:hover { color: #ffd6c2; }
+          }
+
+          .usuario-dropdown {
+            display: none;
+            position: absolute;
+            top: 110%;
+            right: 0;
+            background-color: white;
+            border-radius: 8px;
+            min-width: 180px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+            overflow: hidden;
+            z-index: 1000;
+            flex-direction: column;
+
+            a {
+              display: block;
+              color: #1a1a1a;
+              padding: 12px 16px;
+              font-size: 15px;
+              text-decoration: none;
+              transition: 0.2s;
+              cursor: pointer;
+
+              &:hover { background-color: #f4f4f4; }
+            }
+          }
+
+          .usuario-dropdown.show {
+            display: flex; // mostrar el dropdown cuando se agrega la clase 'show'
+          }
+
+          &.show .usuario-dropdown {
+            display: flex; // ahora se muestra como lista desplegable
+          }
+        }
+
+        /* NO LOGUEADO */
+        .btn-login {
+          background: transparent;
+          border: 2px solid white;
+          color: white;
+          padding: 6px 14px;
+          border-radius: 8px;
+          cursor: pointer;
+          font-weight: 600;
+          transition: 0.2s;
+          &:hover { background: rgba(255, 255, 255, 0.15); }
+        }
+      }
+    }
+  }
+
+  /* ==============================
+    MODO MÓVIL Y TABLETS <=900px
+  ============================== */
+  @media (max-width: 900px) {
+    .nav-container {
+
+      .menu {
+        
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+
+        .logo {
+          flex: 1;
+          display: flex;
+          align-items: center;
+        }
+
+        .logo img {
+          height: 45px;
+          width: auto;
+        }
+
+        .acciones {
+          display: flex;
+          gap: 0.5rem;
+        }
+
+        .buscador {
+          order: 2;
+          margin-left: 0;
+          max-width: 100%;
+          flex-basis: 100%;
+          gap: 0.5rem;
+        }
+
+        .input-busqueda {
+          width: 100%;
+          border-radius: 8px;
+          font-size: 16px;
+          text-align: center;
+          box-sizing: border-box;
+        }
+      }
+
+    }
+
+  }
+
+  @media (max-width: 480px) {
+    // Limitar tamaño del input y evitar que se desborde
+    .search-section input {
+      width: 100%;
+    }
+
+    .right-section button,
+    .right-section .menu-user {
+      max-width: 100px;
+    }
+  }
+}

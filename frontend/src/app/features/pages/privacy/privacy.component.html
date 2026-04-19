@@ -1,0 +1,36 @@
+<section class="privacy">
+
+  <div class="privacy-container">
+
+    <h1>Política de Privacidad</h1>
+
+    <p class="privacy-subtitle">
+      Explicamos cómo recopilamos, usamos y protegemos tu información
+    </p>
+
+    <div class="privacy-list">
+
+      <div
+        class="privacy-item"
+        *ngFor="let item of privacy; let i = index"
+        (click)="toggle(i)"
+        [class.active]="activeIndex === i">
+
+        <div class="privacy-title">
+          <span>{{ item.title }}</span>
+          <span class="icon">
+            {{ activeIndex === i ? '−' : '+' }}
+          </span>
+        </div>
+
+        <div class="privacy-text" *ngIf="activeIndex === i">
+          {{ item.text }}
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>

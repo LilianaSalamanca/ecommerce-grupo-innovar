@@ -1,0 +1,35 @@
+<div class="orders-container">
+
+  <button class="back-btn" (click)="goBack()">
+    ← Volver
+  </button>
+
+  <h2>Mis pedidos</h2>
+
+  <div *ngIf="loading" class="loading">Cargando pedidos...</div>
+
+  <div *ngIf="!loading && orders.length === 0" class="empty">
+    No tienes pedidos registrados.
+  </div>
+
+  <div class="orders-grid" *ngIf="orders.length > 0">
+    <div class="order-card" *ngFor="let o of orders" (click)="viewDetails(o.id)">
+      
+      <div class="order-header">
+        <span class="order-id">Pedido #: PED-{{ o.id }}</span>
+        <span class="estado {{ o.estadoPedido | lowercase }}">
+          {{ o.estadoPedido }}
+        </span>
+      </div>
+
+      <div class="order-body">
+        <p><strong>Fecha:</strong> {{ o.fechaCreacion | date:'medium' }}</p>
+        <p><strong>Total:</strong> ${{ o.total | number }}</p>
+      </div>
+
+      <button class="btn-detalle">Ver detalles</button>
+
+    </div>
+  </div>
+
+</div>

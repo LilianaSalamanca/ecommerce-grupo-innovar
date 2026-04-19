@@ -1,0 +1,165 @@
+<div class="pedidos-container">
+
+  <div class="header">
+    <h2>Gestión de Pedidos</h2>
+  </div>
+
+  <!-- FILTROS -->
+  <div class="filtros-container">
+
+    <input
+      type="text"
+      placeholder="Buscar por email"
+      [(ngModel)]="emailFiltro"
+      (ngModelChange)="onFiltroChange()"
+    />
+
+    <select [(ngModel)]="estadoFiltro" (change)="onFiltroChange()">
+      <option value="">Estado</option>
+      <option value="PENDIENTE">Pendiente</option>
+      <option value="PROCESANDO">Procesando</option>
+      <option value="ENVIADO">Enviado</option>
+      <option value="COMPLETADO">Completado</option>
+      <option value="CANCELADO">Cancelado</option>
+    </select>
+
+    <input
+      type="date"
+      [(ngModel)]="fechaInicio"
+      (change)="onFiltroChange()"
+    />
+
+    <button class="btn-limpiar" (click)="limpiarFiltros()">
+      Limpiar filtros
+    </button>
+
+  </div>
+
+  <!-- TOAST -->
+  <div *ngIf="message"
+       class="toast-message"
+       [class.success]="messageType === 'success'"
+       [class.error]="messageType === 'error'">
+    {{ message }}
+  </div>
+
+  <!-- LOADING -->
+  <div *ngIf="loading" class="loading">
+    Cargando pedidos...
+  </div>
+
+  <!-- TABLA -->
+  <div class="tabla-wrapper" *ngIf="!loading && pedidos.length > 0">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Email</th>
+          <th>Total</th>
+          <th>Estado</th>
+          <th>Pago</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let pedido of pedidos"
+            [class.row-wallet]="pedido.estadoPago === 'EN_WALLET'">
+
+          <td class="cliente">
+            {{ pedido.nombreCliente }} {{ pedido.apellidoCliente }}
+          </td>
+
+          <td class="email">
+            {{ pedido.emailCliente }}
+          </td>
+
+          <td class="total">
+            {{ pedido.total | currency:'COP':'symbol':'1.0-0' }}
+          </td>
+
+          <!-- ESTADO PEDIDO -->
+          <td>
+
+            <select
+              class="estado-select"
+              [ngClass]="'estado-' + pedido.estadoPedido.toLowerCase()"
+              [ngModel]="pedido.estadoPedido"
+              (ngModelChange)="cambiarEstado(pedido, $event)"
+              [disabled]="esSelectEstadoPedidoDeshabilitado(pedido)"
+            >
+
+              <option
+                *ngFor="let estado of estados"
+                [ngValue]="estado"
+                [disabled]="estado === pedido.estadoPedido || !esEstadoValido($any(pedido.estadoPedido), estado)"
+              >
+                {{ estado }}
+              </option>
+
+            </select>
+
+            <small class="warning"
+              *ngIf="pedido.metodoPago === 'WOMPI' && pedido.estadoPago !== 'APROBADO'">
+              Esperando pago aprobado
+            </small>
+
+          </td>
+
+          <!-- ESTADO PAGO -->
+          <td class="estado-pago">
+
+            <select
+              class="estado-pago-select"
+              [ngClass]="getClaseEstadoPago(pedido.estadoPago)"
+              [ngModel]="pedido.estadoPago"
+              (ngModelChange)="cambiarEstadoPago(pedido, $event)"
+              [disabled]="esSelectEstadoPagoDeshabilitado(pedido)"
+            >
+
+              <option
+                *ngFor="let estado of getOpcionesEstadoPago(pedido)"
+                [ngValue]="estado"
+                [disabled]="estado === pedido.estadoPago"
+              >
+                {{ estado === pedido.estadoPago ? '● ' : '' }}
+                {{ getTextoEstadoPago(estado) }}
+              </option>
+
+            </select>
+
+          </td>
+
+          <!-- ACCIONES -->
+          <td class="acciones">
+
+            <button class="btn-detalles" (click)="abrirDetalles(pedido)">
+              Detalles
+            </button>
+
+            <button
+              class="btn-cancelar"
+              [disabled]="!puedeCancelar(pedido)"
+              (click)="solicitarCancelarPedido(pedido)">
+              Cancelar
+            </button>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <!-- SIN DATOS -->
+  <div *ngIf="!loading && pedidos.length === 0" class="sin-datos">
+    No hay pedidos registrados.
+  </div>
+
+</div>
