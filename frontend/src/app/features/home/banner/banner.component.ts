@@ -66,4 +66,16 @@ export class BannerComponent implements OnInit {
   goToProductos() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  getImagenUrl(imagen: string): string {
+    if (!imagen) return 'assets/default.png';
+
+    // Si ya es URL completa (Cloudinary)
+    if (imagen.startsWith('http://') || imagen.startsWith('https://')) {
+      return imagen;
+    }
+
+    // Si es asset local
+    return `assets/${imagen}`;
+  }
 }

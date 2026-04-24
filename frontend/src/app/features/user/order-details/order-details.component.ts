@@ -43,4 +43,23 @@ export class OrderDetailsComponent implements OnInit {
   goBack() {
     this.router.navigate(['/orders']);
   };
+
+  getImagenUrl(imagen: string | null | undefined): string {
+
+    if (!imagen) {
+      return 'assets/no-image.png';
+    }
+
+    // Si ya es URL externa (Cloudinary)
+    if (imagen.startsWith('http')) {
+      return imagen;
+    }
+
+    // Si es imagen local
+    return `assets/${imagen}`;
+  }
+
+  onImageError(event: any) {
+    event.target.src = 'assets/no-image.png';
+  }
 }

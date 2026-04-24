@@ -43,7 +43,10 @@
     <tbody>
       <tr *ngFor="let producto of productos">
         <td>
-          <img [src]="'assets/' + producto.imagenDestacada" class="producto-img">
+          <img 
+            [src]="getImagenUrl(producto.imagenDestacada)" 
+            (error)="onImageError($event)"
+            class="producto-img">
         </td>
 
         <td>{{producto.nombre}}</td>

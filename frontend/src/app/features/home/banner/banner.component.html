@@ -21,7 +21,7 @@
     <!-- PROMOCIONES -->
     <div class="promo-slider" *ngIf="mostrandoPromociones && promociones.length > 0">
         <div class="promo-card" *ngFor="let promo of promociones">
-            <img [src]="'assets/' + promo.imagenDestacada" [alt]="promo.nombre">
+            <img [src]="getImagenUrl(promo.imagenDestacada)" [alt]="promo.nombre">
             <h3>{{ promo.nombre }}</h3>
             <p>{{ promo.descripcion }}</p>
         </div>
@@ -30,8 +30,7 @@
     <!-- PRODUCTOS DESTACADOS -->
     <div class="productos-destacados" *ngIf="!mostrandoPromociones && productosDestacados.length > 0">
       <div class="producto-card" *ngFor="let producto of productosDestacados">
-        <img [src]="'assets/' + producto.imagenDestacada" [alt]="producto.nombre">
-
+        <img [src]="getImagenUrl(producto.imagenDestacada)" [alt]="producto.nombre">
         <h3>{{ producto.nombre }}</h3>
         <p>{{ producto.precioPublico | currency:'COP':'symbol' }}</p>
       </div>

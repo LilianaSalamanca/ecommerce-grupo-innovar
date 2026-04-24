@@ -168,7 +168,24 @@ export class ProductosComponent implements OnInit {
       subcategoria: this.subcategorias[0] ?? undefined
     };
 
+    this.previewImagen = null;
+    this.imagenFile = undefined as any;
+
     this.editandoProducto = false;
+    this.modalAbierto = true;
+
+  }
+
+  editarProducto(producto: Producto) {
+
+    this.nuevoProducto = { ...producto };
+
+    // 🔥 mostrar imagen actual
+    this.previewImagen = producto.imagenDestacada;
+
+    this.imagenFile = undefined as any;
+
+    this.editandoProducto = true;
     this.modalAbierto = true;
 
   }
@@ -194,8 +211,9 @@ export class ProductosComponent implements OnInit {
 
     if (this.editandoProducto) {
 
+      // ENVÍA IMAGEN SI EXISTE
       this.adminProductoService
-        .actualizar(this.nuevoProducto.id!, this.nuevoProducto)
+        .actualizar(this.nuevoProducto.id!, this.nuevoProducto, this.imagenFile)
         .subscribe({
 
           next: () => {
@@ -215,6 +233,12 @@ export class ProductosComponent implements OnInit {
         });
 
     } else {
+
+      // VALIDAR imagen en creación
+      if (!this.imagenFile) {
+        this.showMessage('Debes seleccionar una imagen', 'error');
+        return;
+      }
 
       this.adminProductoService
         .crear(this.nuevoProducto, this.imagenFile)
@@ -269,16 +293,6 @@ export class ProductosComponent implements OnInit {
         error: () => this.showMessage('Error al eliminar producto', 'error')
 
       });
-
-  }
-
-  // ================= EDITAR PRODUCTO =================
-  editarProducto(producto: Producto) {
-
-    this.nuevoProducto = { ...producto };
-
-    this.editandoProducto = true;
-    this.modalAbierto = true;
 
   }
 
@@ -388,4 +402,22 @@ export class ProductosComponent implements OnInit {
     this.mensajeConfirmacion = '';
   }
 
+  getImagenUrl(imagen: string | null | undefined): string {
+
+    if (!imagen) {
+      return 'assets/no-image.png';
+    }
+
+    // Si ya es URL externa (Cloudinary)
+    if (imagen.startsWith('http')) {
+      return imagen;
+    }
+
+    // Si es imagen local
+    return `assets/${imagen}`;
+  }
+
+  onImageError(event: any) {
+    event.target.src = 'assets/no-image.png';
+  }
 }

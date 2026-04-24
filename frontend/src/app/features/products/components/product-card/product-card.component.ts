@@ -34,4 +34,18 @@ export class ProductCardComponent {
     this.router.navigate(['/producto', this.producto.id]);
   }
 
+  getImagenUrl(imagen: string | null | undefined): string {
+
+    if (!imagen) {
+      return 'assets/no-image.png';
+    }
+
+    // Cloudinary o cualquier URL externa
+    if (imagen.startsWith('http')) {
+      return imagen;
+    }
+
+    // assets local
+    return `assets/${imagen}`;
+  }
 }

@@ -15,49 +15,51 @@ export class AdminProductoService {
 
   constructor(private http: HttpClient) {}
 
-  // ================= PRODUCTOS =================
-
   listar(page: number, size: number): Observable<any> {
     return this.http.get(`${API_PRODUCTOS}?page=${page}&size=${size}`);
   }
 
-  crear(producto: any, imagen: File) {
-    const formData = new FormData();
-
-    formData.append('nombre', producto.nombre);
-    formData.append('referencia', producto.referencia);
-    formData.append('descripcion', producto.descripcion);
-    formData.append('precioPublico', producto.precioPublico);
-    formData.append('precioMayorista', producto.precioMayorista);
-    formData.append('marca', producto.marca);
-    formData.append('stock', producto.stock);
-
-    formData.append('categoriaId', producto.categoria.id);
-    formData.append('subcategoriaId', producto.subcategoria.id);
-
-    formData.append('imagen', imagen);
-
+  crear(producto: any, imagen: File): Observable<any> {
+    const formData = this.buildFormData(producto, imagen);
     return this.http.post(API_PRODUCTOS, formData);
   }
 
-  actualizar(id: number, producto: any) {
-    return this.http.put(`${API_PRODUCTOS}/${id}`, producto);
+  actualizar(id: number, producto: any, imagen?: File): Observable<any> {
+    const formData = this.buildFormData(producto, imagen);
+    return this.http.put(`${API_PRODUCTOS}/${id}`, formData);
   }
 
   eliminar(id: number) {
     return this.http.delete(`${API_PRODUCTOS}/${id}`);
   }
 
-  // ================= CATEGORIAS =================
-
   listarCategorias(): Observable<Categoria[]> {
     return this.http.get<Categoria[]>(API_CATEGORIAS);
   }
-
-  // ================= SUBCATEGORIAS =================
 
   listarSubcategorias(): Observable<Subcategoria[]> {
     return this.http.get<Subcategoria[]>(API_SUBCATEGORIAS);
   }
 
+  // Reutilizable
+  private buildFormData(producto: any, imagen?: File): FormData {
+    const formData = new FormData();
+
+    formData.append('nombre', producto.nombre);
+    formData.append('referencia', producto.referencia);
+    formData.append('descripcion', producto.descripcion);
+    formData.append('precioPublico', String(producto.precioPublico));
+    formData.append('precioMayorista', String(producto.precioMayorista));
+    formData.append('marca', producto.marca);
+    formData.append('stock', String(producto.stock));
+
+    formData.append('categoriaId', String(producto.categoria.id));
+    formData.append('subcategoriaId', String(producto.subcategoria.id));
+
+    if (imagen) {
+      formData.append('imagen', imagen);
+    }
+
+    return formData;
+  }
 }

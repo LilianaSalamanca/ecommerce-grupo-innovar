@@ -47,7 +47,7 @@
 
     <div class="item" *ngFor="let item of order.detalles">
 
-      <img [src]="'assets/' + item.imagenDestacada">
+      <img [src]="getImagenUrl(item.imagenDestacada)">
 
       <div class="info">
         <h4>{{ item.nombreProducto }}</h4>

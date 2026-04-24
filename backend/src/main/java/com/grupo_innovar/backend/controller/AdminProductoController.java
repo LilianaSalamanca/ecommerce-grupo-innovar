@@ -2,7 +2,7 @@ package com.grupo_innovar.backend.controller;
 
 import com.grupo_innovar.backend.dto.ProductoDTO;
 import com.grupo_innovar.backend.model.Producto;
-import com.grupo_innovar.backend.service.FirebaseStorageService;
+import com.grupo_innovar.backend.service.CloudinaryService;
 import com.grupo_innovar.backend.service.ProductoService;
 
 import org.springframework.data.domain.Page;
@@ -17,15 +17,14 @@ import org.springframework.web.multipart.MultipartFile;
 public class AdminProductoController {
 
     private final ProductoService productoService;
-    private final FirebaseStorageService firebaseStorageService;
+    private final CloudinaryService cloudinaryService;
 
-    // Inyección correcta de dependencias
     public AdminProductoController(
             ProductoService productoService,
-            FirebaseStorageService firebaseStorageService
+            CloudinaryService cloudinaryService
     ) {
         this.productoService = productoService;
-        this.firebaseStorageService = firebaseStorageService;
+        this.cloudinaryService = cloudinaryService;
     }
 
     /* ================= LISTAR ================= */
@@ -51,15 +50,8 @@ public class AdminProductoController {
             @RequestParam("imagen") MultipartFile imagen
     ) throws Exception {
 
-        // Validación mínima
-        if (imagen == null || imagen.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
+        String imageUrl = cloudinaryService.uploadFile(imagen);
 
-        // Subir imagen a Firebase
-        String imageUrl = firebaseStorageService.uploadFile(imagen);
-
-        // Mapear a DTO
         ProductoDTO dto = new ProductoDTO();
         dto.setNombre(nombre);
         dto.setReferencia(referencia);
@@ -72,7 +64,6 @@ public class AdminProductoController {
         dto.setSubcategoriaId(subcategoriaId);
         dto.setImagenDestacada(imageUrl);
 
-        // Guardar en DB
         Producto producto = productoService.crear(dto);
 
         return ResponseEntity.ok(producto);
@@ -80,34 +71,47 @@ public class AdminProductoController {
 
     /* ================= ACTUALIZAR ================= */
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Producto> actualizar(
+    @PutMapping(value = "/{id}", consumes = "multipart/form-data")
+    public ResponseEntity<Producto> actualizarProducto(
             @PathVariable Long id,
-            @RequestBody Producto productoActualizado) {
+            @RequestParam String nombre,
+            @RequestParam String referencia,
+            @RequestParam String descripcion,
+            @RequestParam Double precioPublico,
+            @RequestParam Double precioMayorista,
+            @RequestParam String marca,
+            @RequestParam Integer stock,
+            @RequestParam Long categoriaId,
+            @RequestParam Long subcategoriaId,
+            @RequestParam(value = "imagen", required = false) MultipartFile imagen
+    ) throws Exception {
 
-        Producto producto = productoService.buscarPorId(id);
+        Producto productoExistente = productoService.buscarPorId(id);
 
-        if (producto == null) {
+        if (productoExistente == null) {
             return ResponseEntity.notFound().build();
         }
 
-        producto.setReferencia(productoActualizado.getReferencia());
-        producto.setNombre(productoActualizado.getNombre());
-        producto.setDescripcion(productoActualizado.getDescripcion());
-        producto.setPrecioPublico(productoActualizado.getPrecioPublico());
-        producto.setPrecioMayorista(productoActualizado.getPrecioMayorista());
-        producto.setMarca(productoActualizado.getMarca());
-        producto.setStock(productoActualizado.getStock());
+        String imageUrl = productoExistente.getImagenDestacada();
 
-        // Solo actualiza imagen si viene nueva URL
-        if (productoActualizado.getImagenDestacada() != null) {
-            producto.setImagenDestacada(productoActualizado.getImagenDestacada());
+        // Solo sube imagen si viene nueva
+        if (imagen != null && !imagen.isEmpty()) {
+            imageUrl = cloudinaryService.uploadFile(imagen);
         }
 
-        producto.setCategoria(productoActualizado.getCategoria());
-        producto.setSubcategoria(productoActualizado.getSubcategoria());
+        ProductoDTO dto = new ProductoDTO();
+        dto.setNombre(nombre);
+        dto.setReferencia(referencia);
+        dto.setDescripcion(descripcion);
+        dto.setPrecioPublico(precioPublico);
+        dto.setPrecioMayorista(precioMayorista);
+        dto.setMarca(marca);
+        dto.setStock(stock);
+        dto.setCategoriaId(categoriaId);
+        dto.setSubcategoriaId(subcategoriaId);
+        dto.setImagenDestacada(imageUrl);
 
-        Producto actualizado = productoService.guardar(producto);
+        Producto actualizado = productoService.actualizar(id, dto);
 
         return ResponseEntity.ok(actualizado);
     }

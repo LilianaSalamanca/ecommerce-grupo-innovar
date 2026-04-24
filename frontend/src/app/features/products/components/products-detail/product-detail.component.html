@@ -5,7 +5,9 @@
   <div class="detail-container">
 
     <div class="image-section">
-      <img [src]="'assets/' + producto.imagenDestacada" alt="{{ producto.nombre }}">
+      <img 
+        [src]="getImagenUrl(producto.imagenDestacada)" 
+        [alt]="producto.nombre">
     </div>
 
     <div class="info-section">

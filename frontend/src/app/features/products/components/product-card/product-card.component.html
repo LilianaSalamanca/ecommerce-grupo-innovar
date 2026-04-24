@@ -1,14 +1,23 @@
 <div class="card" (click)="verDetalle()">
-    <div class="card-body">
-    <img [src]="'assets/' + producto.imagenDestacada" [alt]="producto.nombre" />
+  <div class="card-body">
+
+    <img 
+      [src]="getImagenUrl(producto.imagenDestacada)" 
+      [alt]="producto.nombre" 
+    />
+
     <h3>{{ producto.nombre }}</h3>
+
     <p class="precio">
-      {{ mostrarMayoristas ? (producto.precioMayorista | currency:'COP') : (producto.precioPublico | currency:'COP') }}
+      {{ mostrarMayoristas 
+        ? (producto.precioMayorista | currency:'COP') 
+        : (producto.precioPublico | currency:'COP') 
+      }}
     </p>
+
   </div>
 
   <button class="btn-add" (click)="agregarAlCarrito($event)">
     Añadir al carrito
   </button>
-
 </div>

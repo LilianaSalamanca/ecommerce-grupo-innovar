@@ -79,7 +79,23 @@ export class ProductDetailComponent implements OnInit {
     this.cartService.agregarAlCarrito(this.producto);
     this.router.navigate(['/checkout']); // Ir directamente al checkout
   }
+
   volver() {
     this.router.navigate(['/productos']);
+  }
+
+  getImagenUrl(imagen: string | null | undefined): string {
+
+    if (!imagen) {
+      return 'assets/no-image.png';
+    }
+
+    // Cloudinary o URL externa
+    if (imagen.startsWith('http')) {
+      return imagen;
+    }
+
+    // imagen local
+    return `assets/${imagen}`;
   }
 }
