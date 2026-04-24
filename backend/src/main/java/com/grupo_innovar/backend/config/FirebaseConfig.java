@@ -16,11 +16,19 @@ public class FirebaseConfig {
     @Value("${FIREBASE_CONFIG_JSON}")
     private String firebaseConfigJson;
 
+    // IMPORTANTE: bucket
+    @Value("${FIREBASE_STORAGE_BUCKET}")
+    private String storageBucket;
+
     @PostConstruct
     public void init() throws Exception {
 
         if (!FirebaseApp.getApps().isEmpty()) {
-            return; // ya inicializado
+            return;
+        }
+
+        if (firebaseConfigJson == null || firebaseConfigJson.isEmpty()) {
+            throw new RuntimeException("FIREBASE_CONFIG_JSON no está configurado");
         }
 
         InputStream serviceAccount =
@@ -31,6 +39,7 @@ public class FirebaseConfig {
 
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(credentials)
+                .setStorageBucket(storageBucket)
                 .build();
 
         FirebaseApp.initializeApp(options);

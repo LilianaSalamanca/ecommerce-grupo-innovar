@@ -21,8 +21,23 @@ export class AdminProductoService {
     return this.http.get(`${API_PRODUCTOS}?page=${page}&size=${size}`);
   }
 
-  crear(producto: any) {
-    return this.http.post(API_PRODUCTOS, producto);
+  crear(producto: any, imagen: File) {
+    const formData = new FormData();
+
+    formData.append('nombre', producto.nombre);
+    formData.append('referencia', producto.referencia);
+    formData.append('descripcion', producto.descripcion);
+    formData.append('precioPublico', producto.precioPublico);
+    formData.append('precioMayorista', producto.precioMayorista);
+    formData.append('marca', producto.marca);
+    formData.append('stock', producto.stock);
+
+    formData.append('categoriaId', producto.categoria.id);
+    formData.append('subcategoriaId', producto.subcategoria.id);
+
+    formData.append('imagen', imagen);
+
+    return this.http.post(API_PRODUCTOS, formData);
   }
 
   actualizar(id: number, producto: any) {

@@ -36,7 +36,7 @@ public class AdminInitializer implements CommandLineRunner {
 
             usuarioRepository.save(admin);
 
-            System.out.println("✅ Usuario ADMIN creado correctamente");
+            System.out.println("Usuario ADMIN creado correctamente");
         }
     }
 }

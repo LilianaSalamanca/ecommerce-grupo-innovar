@@ -217,7 +217,7 @@ export class ProductosComponent implements OnInit {
     } else {
 
       this.adminProductoService
-        .crear(this.nuevoProducto)
+        .crear(this.nuevoProducto, this.imagenFile)
         .subscribe({
 
           next: () => {
