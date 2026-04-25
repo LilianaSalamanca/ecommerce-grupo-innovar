@@ -32,9 +32,8 @@
 
     <!-- COMPRA MÍNIMA -->
     <div *ngIf="!cumpleCompraMinima()" class="aviso-minimo">
-      ⚠️ El total mínimo para comprar es 
+      ⚠️ Compra minima de 
       <strong>$50.000 COP</strong><br>
-      Te faltan {{ faltanteCompraMinima() | currency:'COP' }} para completar tu compra
     </div>
   </div>
 
@@ -126,7 +125,7 @@
     </table>
   </ng-template>
 
-  <!-- RESUMEN 🔥 ACTUALIZADO -->
+  <!-- RESUMEN ACTUALIZADO -->
   <div class="resumen" *ngIf="carrito.length > 0">
 
     <div class="linea-resumen">
