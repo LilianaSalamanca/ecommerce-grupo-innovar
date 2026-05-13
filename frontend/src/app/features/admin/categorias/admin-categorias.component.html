@@ -1,0 +1,273 @@
+<div class="categorias-container">
+
+  <div class="header">
+
+    <h2>Gestión de Categorías</h2>
+
+    <button
+      class="btn-primary"
+      (click)="abrirModalCategoria()">
+
+      + Nueva Categoría
+
+    </button>
+
+  </div>
+
+  <!-- TOAST -->
+
+  <div
+    *ngIf="message"
+    class="toast-message"
+    [class.success]="messageType === 'success'"
+    [class.error]="messageType === 'error'">
+
+    {{ message }}
+
+  </div>
+
+  <!-- LOADING -->
+
+  <div
+    *ngIf="loading"
+    class="loading">
+
+    Cargando categorías...
+
+  </div>
+
+  <!-- GRID -->
+
+  <div class="categorias-grid">
+
+    <div
+      class="categoria-card"
+      *ngFor="let categoria of categorias">
+
+      <!-- HEADER -->
+
+      <div class="categoria-header">
+
+        <h3>{{ categoria.nombre }}</h3>
+
+        <div class="acciones">
+
+          <button
+            class="btn-edit"
+            (click)="editarCategoria(categoria)">
+
+            Editar
+
+          </button>
+
+          <button
+            class="btn-delete"
+            (click)="solicitarEliminarCategoria(categoria)">
+
+            Eliminar
+
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- SUBCATEGORÍAS -->
+
+      <div class="subcategorias">
+
+        <div
+          class="subcategoria-item"
+          *ngFor="let sub of categoria.subcategorias">
+
+          <span>{{ sub.nombre }}</span>
+
+          <div class="acciones-sub">
+
+            <button
+              class="btn-edit"
+              (click)="editarSubcategoria(sub, categoria.id)">
+
+              Editar
+
+            </button>
+
+            <button
+              class="btn-delete"
+              (click)="solicitarEliminarSubcategoria(sub)">
+
+              Eliminar
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- NUEVA SUBCATEGORÍA -->
+
+      <button
+        class="btn-subcategoria"
+        (click)="abrirModalSubcategoria(categoria.id)">
+
+        + Nueva Subcategoría
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =====================================================
+     MODAL CATEGORÍA
+===================================================== -->
+
+<div
+  class="modal"
+  *ngIf="modalCategoria">
+
+  <div class="modal-content">
+
+    <h3>
+
+      {{
+        editandoCategoria
+          ? 'Editar Categoría'
+          : 'Nueva Categoría'
+      }}
+
+    </h3>
+
+    <label>Nombre</label>
+
+    <input
+      [(ngModel)]="categoriaActual.nombre">
+
+    <div class="acciones-modal">
+
+      <button
+        class="btn-cancel"
+        (click)="cerrarModalCategoria()">
+
+        Cancelar
+
+      </button>
+
+      <button
+        class="btn-primary"
+        (click)="guardarCategoria()">
+
+        {{
+          editandoCategoria
+            ? 'Guardar'
+            : 'Crear'
+        }}
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =====================================================
+     MODAL SUBCATEGORÍA
+===================================================== -->
+
+<div
+  class="modal"
+  *ngIf="modalSubcategoria">
+
+  <div class="modal-content">
+
+    <h3>
+
+      {{
+        editandoSubcategoria
+          ? 'Editar Subcategoría'
+          : 'Nueva Subcategoría'
+      }}
+
+    </h3>
+
+    <label>Nombre</label>
+
+    <input
+      [(ngModel)]="subcategoriaActual.nombre">
+
+    <div class="acciones-modal">
+
+      <button
+        class="btn-cancel"
+        (click)="cerrarModalSubcategoria()">
+
+        Cancelar
+
+      </button>
+
+      <button
+        class="btn-primary"
+        (click)="guardarSubcategoria()">
+
+        {{
+          editandoSubcategoria
+            ? 'Guardar'
+            : 'Crear'
+        }}
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =====================================================
+     MODAL CONFIRMACIÓN
+===================================================== -->
+
+<div
+  class="modal-confirm-overlay"
+  *ngIf="modalConfirmacionAbierto">
+
+  <div class="modal-confirm">
+
+    <div class="icon-warning">
+
+      ⚠️
+
+    </div>
+
+    <h3>Confirmación</h3>
+
+    <p>{{ mensajeConfirmacion }}</p>
+
+    <div class="acciones-confirm">
+
+      <button
+        class="btn-cancel"
+        (click)="cerrarModalConfirmacion()">
+
+        Cancelar
+
+      </button>
+
+      <button
+        class="btn-confirm-delete"
+        (click)="confirmarEliminar()">
+
+        Eliminar
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

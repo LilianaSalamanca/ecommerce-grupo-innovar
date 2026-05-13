@@ -1,0 +1,71 @@
+<div class="promociones-container">
+
+  <div class="header">
+
+    <h2>Gestión de Promociones</h2>
+
+    <button
+      class="btn-primary"
+      (click)="abrirModal()">
+
+      + Nueva Promoción
+
+    </button>
+
+  </div>
+
+  <div class="promociones-grid">
+
+    <div
+      class="promo-card"
+      *ngFor="let promo of promociones">
+
+      <img
+        [src]="promo.imagen"
+        class="promo-img">
+
+      <div class="promo-content">
+
+        <h3>{{ promo.titulo }}</h3>
+
+        <p>{{ promo.descripcion }}</p>
+
+        <div class="estado">
+
+          <span
+            [class.active]="promo.activa"
+            [class.inactive]="!promo.activa">
+
+            {{ promo.activa ? 'Activa' : 'Inactiva' }}
+
+          </span>
+
+        </div>
+
+        <div class="acciones">
+
+          <button
+            class="btn-edit"
+            (click)="editar(promo)">
+
+            Editar
+
+          </button>
+
+          <button
+            class="btn-delete"
+            (click)="eliminar(promo.id)">
+
+            Eliminar
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

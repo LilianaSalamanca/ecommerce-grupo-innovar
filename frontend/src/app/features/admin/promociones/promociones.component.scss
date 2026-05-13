@@ -1,0 +1,122 @@
+.promociones-container {
+  padding: 2rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.promociones-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+
+}
+
+.promo-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.promo-img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.promo-content {
+  padding: 1.2rem;
+}
+
+.promo-content h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.7rem;
+}
+
+.estado {
+  margin: 1rem 0;
+}
+
+.estado span {
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.inactive {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.acciones {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+}
+
+.btn-edit {
+  background: #fef9c3;
+}
+
+.btn-delete {
+  background: #fee2e2;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  width: 500px;
+  max-width: 95%;
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+}
+
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  padding: 0.9rem;
+}
+
+.acciones-modal {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+}
