@@ -34,7 +34,7 @@ public class JwtTokenProvider {
 
         String email = authentication.getName();
 
-        // 🔐 Obtener rol real del usuario desde Spring Security
+        // Obtener rol real del usuario desde Spring Security
         String role = authentication.getAuthorities()
                 .stream()
                 .findFirst()
@@ -43,7 +43,7 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .setSubject(email)
-                .claim("role", role) // 🔥 Ahora es dinámico
+                .claim("role", role) 
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(key, SignatureAlgorithm.HS256)

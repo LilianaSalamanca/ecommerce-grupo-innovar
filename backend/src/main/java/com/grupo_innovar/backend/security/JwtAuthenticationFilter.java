@@ -54,7 +54,7 @@ System.out.println("URL: " + request.getRequestURI());
 System.out.println("METHOD: " + request.getMethod());
 System.out.println("AUTH HEADER: " + request.getHeader("Authorization"));
 
-        // 🔥 IMPORTANTE: permitir preflight sin pasar por JWT
+        // permitir preflight sin pasar por JWT
         if (request.getMethod().equalsIgnoreCase("OPTIONS")) {
             filterChain.doFilter(request, response);
             return;
