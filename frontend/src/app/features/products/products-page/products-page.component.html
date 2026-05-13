@@ -36,10 +36,23 @@
   <!-- Lista de productos -->
   <div class="grid">
     <app-product-card
-      *ngFor="let p of productosFiltrados"
+      *ngFor="let p of productosPaginados"
       [producto]="p"
       [mostrarMayoristas]="mostrarMayoristas">
     </app-product-card>
+  </div>
+
+  <!-- Paginacion -->
+  <div class="paginacion">
+
+    <button
+      *ngFor="let p of [].constructor(totalPaginas); let i = index"
+      (click)="cambiarPagina(i + 1)"
+      [class.activa]="paginaActual === i + 1"
+    >
+      {{ i + 1 }}
+    </button>
+
   </div>
 
 </div>

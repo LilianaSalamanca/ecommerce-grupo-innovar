@@ -41,6 +41,11 @@ export class AdminProductoService {
     return this.http.get<Subcategoria[]>(API_SUBCATEGORIAS);
   }
 
+  listarSubcategoriasPorCategoria(categoriaId: number) {
+    return this.http.get<any[]>(
+      `${API_SUBCATEGORIAS}/categoria/${categoriaId}`
+    );
+  }
   // Reutilizable
   private buildFormData(producto: any, imagen?: File): FormData {
     const formData = new FormData();

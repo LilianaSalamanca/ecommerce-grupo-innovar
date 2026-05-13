@@ -81,18 +81,38 @@
       .acciones {
         display: flex;
         align-items: center;
-        gap: 1rem;
+        gap: 10px;
+
+        .nav-link {
+          color: white;
+          font-weight: 500;
+          padding: 6px 10px;
+          border-radius: 6px;
+          transition: all 0.2s ease;
+          text-decoration: none;
+        }
+
+        .nav-link:hover {
+          background-color: rgba(255, 255, 255, 0.2);
+          border-radius: 6px;
+        }
+
+        .nav-link.active {
+          background-color: white;
+          color: #ff6a00;
+          border-radius: 6px;
+        }
 
         /* CARRITO */
         .carrito {
           position: relative;
-          font-size: 26px;
-          background: rgba(0, 0, 0, 0.25);
-          padding: 10px;
-          border-radius: 50%;
+          font-size: 22px;
+          background: none;
+          padding: 6px;
+          border-radius: 6px;
           color: white;
-          transition: 0.2s;
-          &:hover { background: rgba(0, 0, 0, 0.38); transform: scale(1.08); }
+          transition: all 0.2s ease;
+          &:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.08); }
 
           .contador {
             position: absolute;
@@ -162,15 +182,17 @@
 
         /* NO LOGUEADO */
         .btn-login {
+          border: 1px solid white;
           background: transparent;
-          border: 2px solid white;
           color: white;
           padding: 6px 14px;
           border-radius: 8px;
-          cursor: pointer;
-          font-weight: 600;
-          transition: 0.2s;
-          &:hover { background: rgba(255, 255, 255, 0.15); }
+          transition: all 0.2s ease;
+        }
+
+        .btn-login:hover {
+          background: white;
+          color: #ff6a00;
         }
       }
     }

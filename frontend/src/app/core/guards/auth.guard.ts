@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -14,42 +12,53 @@ export class AuthGuard implements CanActivate {
     private router: Router
   ) {}
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): boolean {
 
-  return this.auth.isLogged$.pipe(
-    take(1),
-    map(isLogged => {
+    // Validación REAL de autenticación
+    if (!this.auth.isAuthenticated()) {
 
-      if (!isLogged) {
-        this.router.navigate(['/login'], {
-          queryParams: { returnUrl: state.url }
-        });
-        return false;
-      }
-
-      const expectedRoles = route.data['roles'] as string[] | undefined;
-      const userRole = this.auth.getUserRole();
-
-      if (!userRole) {
-        this.router.navigate(['/login']);
-        return false;
-      }
-
-      if (expectedRoles?.length) {
-
-        // ADMIN acceso total
-        if (userRole === 'ADMIN') {
-          return true;
+      this.router.navigate(['/login'], {
+        queryParams: {
+          returnUrl: state.url
         }
+      });
 
-        if (!expectedRoles.includes(userRole)) {
-          this.router.navigate(['/']);
-          return false;
-        }
-      }
+      return false;
+    }
 
+    // Roles esperados
+    const expectedRoles =
+      route.data['roles'] as string[] | undefined;
+
+    const userRole = this.auth.getUserRole();
+
+    // Usuario sin rol válido
+    if (!userRole) {
+
+      this.router.navigate(['/login']);
+
+      return false;
+    }
+
+    // ADMIN acceso total
+    if (userRole === 'ADMIN') {
       return true;
-    })
-  );
-}
+    }
+
+    // Validar permisos
+    if (
+      expectedRoles?.length &&
+      !expectedRoles.includes(userRole)
+    ) {
+
+      this.router.navigate(['/']);
+
+      return false;
+    }
+
+    return true;
+  }
 }

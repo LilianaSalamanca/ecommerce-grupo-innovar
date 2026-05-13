@@ -27,6 +27,11 @@ export class ProductsPageComponent implements OnInit {
   mostrarMayoristas = false;
   loadingProductos = false;
 
+  paginaActual = 1;
+  tamanoPagina = 100;
+  totalPaginas = 0;
+  productosPaginados: Producto[] = [];
+
   constructor(private productoService: ProductoService) {}
 
   // ===========================================================
@@ -53,6 +58,25 @@ export class ProductsPageComponent implements OnInit {
     });
 
     this.cargarDatos();
+
+    this.productoService.categoria$.subscribe(categoria => {
+
+      this.categoriaSeleccionada = categoria;
+
+      this.aplicarFiltros(
+        this.productoService.currentTerminoBusqueda
+      );
+    });
+
+    this.productoService.subcategoria$.subscribe(subcategoria => {
+
+      this.subcategoriaSeleccionada = subcategoria;
+
+      this.aplicarFiltros(
+        this.productoService.currentTerminoBusqueda
+      );
+    });
+
   }
 
   // ===========================================================
@@ -73,6 +97,8 @@ export class ProductsPageComponent implements OnInit {
     this.productoService.obtenerProductos().subscribe(prods => {
       this.productos = prods;
       this.productosFiltrados = [...prods];
+      this.paginaActual = 1;
+      this.actualizarPaginacion(); 
       this.loadingProductos = false;
     });
   }
@@ -82,6 +108,7 @@ export class ProductsPageComponent implements OnInit {
   // ===========================================================
   aplicarFiltros(terminoBusqueda: string = '') {
 
+    this.paginaActual = 1;
     const termino = this.normalizar(terminoBusqueda);
 
     // Filtrar subcategorías según categoría seleccionada
@@ -121,24 +148,108 @@ export class ProductsPageComponent implements OnInit {
         descripcionNormalizada.includes(termino);
 
       return coincideCategoria && coincideSubcategoria && coincideBusqueda;
+    })
+
+    // ordenar por relevancia
+    .sort((a, b) => {
+
+      const nombreA = this.normalizar(a.nombre);
+
+      const nombreB = this.normalizar(b.nombre);
+
+      const descA = this.normalizar(a.descripcion ?? '');
+
+      const descB = this.normalizar(b.descripcion ?? '');
+
+      const aNombre = nombreA.includes(termino);
+
+      const bNombre = nombreB.includes(termino);
+
+      // coincidencia en nombre tiene prioridad
+      if (aNombre && !bNombre) return -1;
+
+      if (!aNombre && bNombre) return 1;
+
+      // exact match primero
+      if (nombreA === termino) return -1;
+
+      if (nombreB === termino) return 1;
+
+      return 0;
     });
+
+    this.actualizarPaginacion();
+
   }
 
   // ===========================================================
   // EVENTOS SELECT
   // ===========================================================
   onCategoriaChange(value: any) {
-    this.categoriaSeleccionada = value ? Number(value) : null;
+
+    this.categoriaSeleccionada =
+      value ? Number(value) : null;
+
     this.subcategoriaSeleccionada = null;
-    this.aplicarFiltros(this.productoService.currentTerminoBusqueda);
+
+    // limpiar búsqueda navbar
+    this.productoService.actualizarBusqueda('');
+
+    // actualizar estado global
+    this.productoService.actualizarCategoria(
+      this.categoriaSeleccionada
+    );
+
+    this.productoService.actualizarSubcategoria(null);
+
+    this.aplicarFiltros('');
   }
 
   onSubcategoriaChange(value: any) {
-    this.subcategoriaSeleccionada = value ? Number(value) : null;
-    this.aplicarFiltros(this.productoService.currentTerminoBusqueda);
+
+    this.subcategoriaSeleccionada =
+      value ? Number(value) : null;
+
+    // limpiar búsqueda navbar
+    this.productoService.actualizarBusqueda('');
+
+    // actualizar estado global
+    this.productoService.actualizarSubcategoria(
+      this.subcategoriaSeleccionada
+    );
+
+    this.aplicarFiltros('');
   }
 
   toggleMayorista() {
     this.mostrarMayoristas = !this.mostrarMayoristas;
   }
+
+  actualizarPaginacion() {
+
+    if (!this.productosFiltrados) return;
+
+    this.totalPaginas = Math.ceil(
+      this.productosFiltrados.length / this.tamanoPagina
+    );
+
+    const inicio =
+      (this.paginaActual - 1) * this.tamanoPagina;
+
+    const fin =
+      inicio + this.tamanoPagina;
+
+    this.productosPaginados =
+      this.productosFiltrados.slice(inicio, fin);
+}
+
+  cambiarPagina(p: number) {
+
+    this.paginaActual = p;
+
+    this.actualizarPaginacion();
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  
 }

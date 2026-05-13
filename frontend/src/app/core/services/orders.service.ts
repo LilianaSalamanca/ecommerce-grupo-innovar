@@ -2,12 +2,30 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'environments/environment';
+import { EstadoPago, EstadoPedido, OrderItem } from '@core/enums/order-status.enum';
 
 export interface Order {
   id: number;
-  fechaCreacion: string;
+
+  estadoPedido: EstadoPedido;
+  estadoPago: EstadoPago;
+
+  metodoPago: string;
+
   total: number;
-  estadoPedido: string;
+  subtotal: number;
+  costoEnvio: number;
+
+  fechaCreacion: string;
+
+  fechaProcesando?: string;
+  fechaEnviado?: string;
+  fechaCompletado?: string;
+  fechaCancelado?: string;
+
+  checkoutUrl?: string;
+
+  detalles: OrderItem[];
 }
 
 @Injectable({
@@ -25,5 +43,11 @@ export class OrdersService {
 
   getOrderById(id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
+  }
+
+  getWompiWidgetData(id: number) {
+    return this.http.get<any>(
+      `${this.apiUrl}/${id}/wompi-widget`
+    );
   }
 }

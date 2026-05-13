@@ -24,8 +24,7 @@
       <!-- MAYORISTA SIN CUMPLIR -->
       <span *ngIf="!envioGratis() && tieneMayorista()">
         Envío gratis para mayoristas por compras superiores a 
-        <strong>$600.000 COP</strong><br>
-        Te faltan {{ faltanteEnvio() | currency:'COP' }} para envío gratis
+        <strong>$600.000 COP</strong>
       </span>
 
     </div>
@@ -162,15 +161,15 @@
 
   <!-- RELACIONADOS -->
   <div class="productos-relacionados" *ngIf="productosRelacionados.length > 0">
-    <h3>Productos relacionados</h3>
+    <h3>Completa tu compra</h3>
 
     <div class="cards-relacionadas">
       <div class="producto-card" *ngFor="let p of productosRelacionados">
-        <div *ngFor="let item of carrito">
+        
           <img 
-            [src]="getImagenUrl(item.producto.imagenDestacada)"
+            [src]="getImagenUrl(p.imagenDestacada)"
             (error)="onImageError($event)">
-        </div>
+        
         <h4>{{ p.nombre }}</h4>
         <p>{{ p.precioPublico | currency:'COP' }}</p>
         <button (click)="agregarRelacionado(p)">

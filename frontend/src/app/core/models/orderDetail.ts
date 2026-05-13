@@ -7,6 +7,10 @@ export interface OrderDetail {
   checkoutUrl: string;
 
   fechaCreacion: string;
+  fechaProcesando?: string;
+  fechaEnviado?: string;
+  fechaCompletado?: string;
+  fechaCancelado?: string;
 
   nombreCliente: string;
   apellidoCliente: string;

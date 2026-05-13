@@ -23,6 +23,16 @@
       <!-- ACCIONES -->
       <div class="acciones">
 
+        <!-- INICIO -->
+        <a class="nav-link" routerLink="/">
+          Inicio
+        </a>
+
+        <!-- PEDIDOS -->
+        <a class="nav-link" [routerLink]="['/orders']">
+          Pedidos
+        </a>
+
         <!-- CARRITO -->
         <a class="carrito" routerLink="/cart">
           <i class="fas fa-shopping-cart"></i>
@@ -34,17 +44,36 @@
         <!-- LOGUEADO -->
         <ng-container *ngIf="isLogged; else noLogueado">
 
-          <div class="usuario-menu" (mouseleave)="closeUserMenu()">
-            <button class="usuario-btn" (mouseover)="openUserMenu()">
-              <span class="icono-usuario"><i class="fas fa-user"></i></span>
-               {{ nombreUsuario }} <i class="fas fa-chevron-down"></i>
+          <div
+            class="usuario-menu"
+            [ngClass]="{ 'show': userMenuOpen }">
+
+            <button
+              class="usuario-btn"
+              (click)="$event.stopPropagation(); toggleUserMenu()">
+
+              <span class="icono-usuario">
+                <i class="fas fa-user"></i>
+              </span>
+
+              {{ nombreUsuario }}
+
+              <i class="fas fa-chevron-down"></i>
+
             </button>
 
-            <div class="usuario-dropdown" [ngClass]="{ 'show': userMenuOpen }">
-              <a routerLink="/dashboard">Mi perfil</a>
-              <a routerLink="/orders">Mis pedidos</a>
-              <a (click)="logout()">Cerrar sesión</a>
+            <div class="usuario-dropdown">
+
+              <a routerLink="/dashboard">
+                Mi perfil
+              </a>
+
+              <a (click)="logout()">
+                Cerrar sesión
+              </a>
+
             </div>
+
           </div>
 
         </ng-container>

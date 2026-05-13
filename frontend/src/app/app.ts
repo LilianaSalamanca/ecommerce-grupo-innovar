@@ -20,7 +20,7 @@ import { FooterComponent } from "@shared/components/footer/footer.component";
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
 })
-export class App implements OnInit {
+export class App {
 
   isAdminRoute = false;
 
@@ -33,9 +33,6 @@ export class App implements OnInit {
       .subscribe((event: NavigationEnd) => {
         this.isAdminRoute = event.urlAfterRedirects.startsWith('/admin');
       });
-  }
+  } 
 
-  ngOnInit(): void {
-    this.authService.restoreSession();
-  }
 }

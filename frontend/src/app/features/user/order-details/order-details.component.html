@@ -41,6 +41,73 @@
 
   </div>
 
+  <!-- TIMELINE -->
+  <div class="card timeline-card">
+
+    <h3>Seguimiento del pedido</h3>
+
+    <div class="timeline">
+
+      <div
+        class="timeline-step"
+        *ngFor="let step of timelineSteps">
+
+        <!-- CIRCLE -->
+        <div
+          class="circle"
+          [ngClass]="{
+            completed: step.completed,
+            active: step.active,
+            cancelled: step.cancelled
+          }">
+
+          <span *ngIf="step.completed">✓</span>
+
+          <span *ngIf="!step.completed && !step.active">
+            {{ timelineSteps.indexOf(step) + 1 }}
+          </span>
+
+          <span *ngIf="step.active && !step.cancelled">
+            •
+          </span>
+
+          <span *ngIf="step.cancelled">
+            ×
+          </span>
+
+        </div>
+
+        <!-- LINE -->
+        <div
+          class="line"
+          *ngIf="timelineSteps.indexOf(step) !== timelineSteps.length - 1"
+          [ngClass]="{
+            completed: step.completed
+          }">
+        </div>
+
+        <!-- LABEL -->
+        <div class="step-content">
+
+          <span class="step-title">
+            {{ step.label }}
+          </span>
+
+          <span
+            class="step-date"
+            *ngIf="step.date">
+
+            {{ step.date | date:'short' }}
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
   <!-- PRODUCTOS -->
   <div class="card productos">
     <h3>Productos del pedido</h3>
@@ -85,12 +152,14 @@
         <b>{{ order.referenciaPago || '---' }}</b>
       </div>
 
-      <a *ngIf="order.checkoutUrl"
-         class="btn-pago"
-         [href]="order.checkoutUrl"
-         target="_blank">
-        Completar pago
-      </a>
+      <button
+        *ngIf="canPayNow()"
+        class="btn-pago"
+        (click)="payNow()">
+
+        <i class="pi pi-credit-card"></i>
+        Pagar ahora
+      </button>
 
     </div>
 

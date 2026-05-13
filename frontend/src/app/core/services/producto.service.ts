@@ -12,8 +12,15 @@ export class ProductoService {
   private apiUrl = `${environment.apiUrl}/api`;
   
   currentTerminoBusqueda = '';
+
   private terminoBusquedaSubject = new BehaviorSubject<string>(this.currentTerminoBusqueda);
   terminoBusqueda$ = this.terminoBusquedaSubject.asObservable();  
+
+  private categoriaSubject = new BehaviorSubject<number | null>(null);
+  categoria$ = this.categoriaSubject.asObservable();
+
+  private subcategoriaSubject = new BehaviorSubject<number | null>(null);
+  subcategoria$ = this.subcategoriaSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -58,25 +65,41 @@ export class ProductoService {
   // ─────────────────────────────────────
 
   actualizarBusqueda(term: string) {
+
     this.currentTerminoBusqueda = term;
+
+    // si hay búsqueda → limpiar selects
+    if (term.trim().length > 0) {
+      this.categoriaSubject.next(null);
+      this.subcategoriaSubject.next(null);
+    }
+
     this.terminoBusquedaSubject.next(term);
+  }
+
+  actualizarCategoria(categoria: number | null) {
+    this.categoriaSubject.next(categoria);
+  }
+
+  actualizarSubcategoria(subcategoria: number | null) {
+    this.subcategoriaSubject.next(subcategoria);
   }
 
   // ─────────────────────────────────────
   // Productos relacionados
   // ─────────────────────────────────────
-  obtenerProductosRelacionados(catId: number, subId: number): Observable<Producto[]> {
+  obtenerRelacionados(productId: number) {
     return this.http.get<Producto[]>(
-      `${this.apiUrl}/productos/relacionados?categoriaId=${catId}&subcategoriaId=${subId}`
+      `${this.apiUrl}/productos/${productId}/relacionados`
     );
   }
 
   // ─────────────────────────────────────  
   // Promociones
   // ─────────────────────────────────────
-  obtenerPromocionesActivas(): Observable<Producto[]> {
-    return this.http.get<Producto[]>(
-      `${this.apiUrl}/productos/promociones/activas`
+  obtenerPromocionesActivas() {
+    return this.http.get<any[]>(
+      `${environment.apiUrl}/api/promociones/activas`
     );
   }
 
@@ -87,4 +110,5 @@ export class ProductoService {
     return this.http.get<Producto[]>(`${this.apiUrl}/productos/destacados`);
   }
 
+  
 }

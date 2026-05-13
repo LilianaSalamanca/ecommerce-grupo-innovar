@@ -6,6 +6,7 @@ import { CartService } from '@core/services/cart.service';
 import { ProductoService } from '@core/services/producto.service';
 import { AuthService } from '@core/services/auth.service';
 import { debounceTime, distinctUntilChanged, filter, Subject } from 'rxjs';
+import { HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-navbar',
@@ -42,8 +43,11 @@ export class Navbar implements OnInit {
   ngOnInit(): void {
 
     // Estado de sesión
+    this.authService.isLogged$.subscribe(isLogged => {
+      this.isLogged = isLogged;
+    });
+
     this.authService.user$.subscribe(user => {
-      this.isLogged = !!user;
       this.nombreUsuario = user?.nombre ?? '';
     });
 
@@ -60,11 +64,17 @@ export class Navbar implements OnInit {
     ).subscribe(text => {
       this.productoService.actualizarBusqueda(text);
     });
+
+    this.productoService.terminoBusqueda$
+      .subscribe(term => {
+
+        this.terminoBusqueda = term;
+      });
   }
 
   logout() {
     this.authService.logout();
-    this.router.navigate(['/home']);
+    this.router.navigate(['/']);
   }
 
   onSearchInput() {
@@ -73,14 +83,6 @@ export class Navbar implements OnInit {
 
   toggleMenu() {
     this.menuAbierto = !this.menuAbierto;
-  }
-
-  openUserMenu() {
-    this.userMenuOpen = true;
-  }
-
-  closeUserMenu() {
-    this.userMenuOpen = false;
   }
 
   abrirCarrito() {
@@ -92,4 +94,18 @@ export class Navbar implements OnInit {
       this.router.navigate(['/carrito']);
     }
   }
+
+  toggleUserMenu(): void {
+    this.userMenuOpen = !this.userMenuOpen;
+  }
+
+  @HostListener('document:click', ['$event'])
+    closeMenu(event: Event): void {
+
+      const target = event.target as HTMLElement;
+
+      if (!target.closest('.usuario-menu')) {
+        this.userMenuOpen = false;
+      }
+    }
 }

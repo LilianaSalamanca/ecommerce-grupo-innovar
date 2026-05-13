@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Producto } from '@core/models/producto.model';
 import { CartService } from '@core/services/cart.service';
 import { ProductoService } from '@core/services/producto.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-cart',
@@ -38,7 +39,7 @@ export class CartComponent implements OnInit {
     this.cartService.carrito$.subscribe(items => {
       this.carrito = items;
       this.syncCantidades();
-      this.cargarProductosRelacionados();
+      this.cargarRecomendaciones();
     });
 
     if (this.isBrowser) {
@@ -135,32 +136,35 @@ export class CartComponent implements OnInit {
   }
 
   /* -------------------- Productos relacionados -------------------- */
-  cargarProductosRelacionados(): void {
+  cargarRecomendaciones(): void {
     if (this.carrito.length === 0) {
       this.productosRelacionados = [];
       return;
     }
 
-    const base = this.carrito[0].producto;
+    const ids = this.carrito
+      .map(i => i.producto.id)
+      .filter(id => id != null) as number[];
 
-    if (!base.categoria?.id || !base.subcategoria?.id) {
-      this.productosRelacionados = [];
-      return;
-    }
+    const observables = ids.map(id =>
+      this.productoService.obtenerRelacionados(id)
+    );
 
-    this.productoService.obtenerProductos().subscribe(productos => {
-      const idsEnCarrito = new Set(
-        this.carrito.map(i => i.producto.id)
-      );
+    forkJoin(observables).subscribe(results => {
 
-      this.productosRelacionados = productos
-        .filter(p =>
-          p.id &&
-          !idsEnCarrito.has(p.id) &&
-          p.categoria?.id === base.categoria.id &&
-          p.subcategoria?.id === base.subcategoria.id
-        )
-        .slice(0, 6);
+      const todos = results.flat();
+
+      const idsCarrito = new Set(ids);
+
+      const unicos = new Map<number, Producto>();
+
+      todos.forEach(p => {
+        if (p.id && !idsCarrito.has(p.id)) {
+          unicos.set(p.id, p);
+        }
+      });
+
+      this.productosRelacionados = Array.from(unicos.values()).slice(0, 5);
     });
   }
 

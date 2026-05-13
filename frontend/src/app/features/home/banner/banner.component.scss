@@ -1,208 +1,456 @@
+/* ================= BANNER ================= */
+
 .banner {
-  margin-top: 70px;
-  display: flex;
-  justify-content: space-between;
+  margin-top: 90px;
+  margin-left: 24px;
+  margin-right: 24px;
+  padding: 2.5rem;
+  border-radius: 28px;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 2rem;
   align-items: center;
-  padding: 35px;
-  padding-top: 75px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, #ff6600, #ff9900);
-  color: #fff;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);;
+  min-height: 360px;
+  background:
+  radial-gradient(
+    circle at top left,
+    rgba(255,190,92,0.22),
+    transparent 28%
+  ),
+  radial-gradient(
+    circle at bottom right,
+    rgba(255,140,0,0.18),
+    transparent 30%
+  ),
+  linear-gradient(
+    135deg,
+    #ff8a1f 0%,
+    #ff7a00 25%,
+    #ff6b00 50%,
+    #f97316 75%,
+    #ea580c 100%
+  );
 
-  .banner-left {
-    max-width: 45%;
+  box-shadow:
+    0 20px 50px rgba(0,0,0,0.18);
 
-    h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
+  color: white;
 
-    p {
-      font-size: 1.1rem;
-      opacity: 0.9;
-      margin-bottom: 18px;
-    }
+}
 
-    .btn-primary {
-      padding: 12px 26px;
-      background: #fff;
-      color: #ff6600;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: 0.3s;
+/* ================= EFECTOS ================= */
 
-      &:hover {
-        background: #ffe1c7;
-      }
-    }
+.banner::before {
+
+  content: '';
+
+  position: absolute;
+
+  width: 520px;
+  height: 520px;
+
+  background: rgba(255,255,255,0.05);
+
+  border-radius: 50%;
+
+  top: -220px;
+  right: -180px;
+
+  filter: blur(24px);
+
+}
+
+.banner::after {
+
+  content: '';
+
+  position: absolute;
+
+  width: 280px;
+  height: 280px;
+
+  background: rgba(255,255,255,0.04);
+
+  border-radius: 50%;
+
+  bottom: -100px;
+  left: -60px;
+
+  filter: blur(18px);
+
+}
+
+/* ================= LEFT ================= */
+
+.banner-left {
+
+  position: relative;
+  z-index: 2;
+
+  max-width: 520px;
+
+}
+
+.badge-banner {
+
+  display: inline-flex;
+  align-items: center;
+
+  padding: 0.55rem 1rem;
+
+  margin-bottom: 1.5rem;
+
+  border-radius: 999px;
+
+  background: rgba(255,255,255,0.12);
+
+  border: 1px solid rgba(255,255,255,0.14);
+
+  backdrop-filter: blur(10px);
+
+  font-size: 0.8rem;
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+}
+
+.banner-left h1 {
+
+  font-size: 4.2rem;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  letter-spacing: -2px;
+
+  margin-bottom: 1.5rem;
+
+}
+
+.banner-left p {
+
+  font-size: 1.15rem;
+
+  line-height: 1.8;
+
+  color: rgba(255,255,255,0.85);
+
+  max-width: 460px;
+
+}
+
+/* ================= RIGHT ================= */
+
+.banner-right {
+
+  position: relative;
+  z-index: 2;
+
+  width: 48%;
+
+  display: flex;
+  justify-content: flex-end;
+
+}
+
+.promo-slider,
+.productos-destacados {
+
+  display: flex;
+
+  gap: 1rem;
+
+  overflow-x: auto;
+
+  padding-bottom: 10px;
+
+  scrollbar-width: none;
+
+}
+
+.promo-slider::-webkit-scrollbar,
+.productos-destacados::-webkit-scrollbar {
+
+  display: none;
+
+}
+
+/* ================= CARDS ================= */
+
+.promo-card,
+.producto-card {
+
+  min-width: 240px;
+
+  background: rgba(255,255,255,0.10);
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  backdrop-filter: blur(14px);
+
+  border-radius: 24px;
+
+  overflow: hidden;
+
+  transition:
+    transform 0.25s ease,
+    border 0.25s ease,
+    box-shadow 0.25s ease;
+
+  cursor: pointer;
+
+}
+
+.promo-card:hover,
+.producto-card:hover {
+
+  transform: translateY(-6px);
+
+  border-color: rgba(255,255,255,0.18);
+
+  box-shadow:
+    0 14px 28px rgba(0,0,0,0.28);
+
+}
+
+/* ================= IMAGEN ================= */
+
+.image-container {
+
+  width: 100%;
+  height: 180px;
+
+  overflow: hidden;
+
+}
+
+.image-container img {
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition: transform 0.35s ease;
+
+}
+
+.promo-card:hover img,
+.producto-card:hover img {
+
+  transform: scale(1.05);
+
+}
+
+/* ================= CONTENT ================= */
+
+.card-content {
+
+  padding: 1rem;
+
+}
+
+.promo-badge {
+
+  display: inline-block;
+
+  margin-bottom: 0.8rem;
+
+  padding: 0.35rem 0.7rem;
+
+  border-radius: 999px;
+
+  background: rgba(255,255,255,0.14);
+
+  font-size: 0.72rem;
+  font-weight: 700;
+
+  letter-spacing: 0.8px;
+
+}
+
+.card-content h3 {
+
+  font-size: 1rem;
+  font-weight: 700;
+
+  margin-bottom: 0.6rem;
+
+  line-height: 1.4;
+
+}
+
+.card-content p {
+
+  font-size: 0.88rem;
+
+  line-height: 1.5;
+
+  color: rgba(255,255,255,0.78);
+
+}
+
+.precio {
+
+  display: inline-block;
+
+  margin-top: 0.4rem;
+
+  font-size: 1rem;
+  font-weight: 700;
+
+  color: #ffd89e;
+
+}
+
+/* ================= VACÍO ================= */
+
+.sin-contenido {
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  min-height: 180px;
+
+  text-align: center;
+
+  color: rgba(255,255,255,0.78);
+
+  font-size: 1rem;
+
+}
+
+/* ================= LOADING ================= */
+
+.banner-loading {
+
+  margin-top: 120px;
+
+  text-align: center;
+
+  color: #64748b;
+
+  font-size: 1rem;
+  font-weight: 600;
+
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1200px) {
+
+  .banner-wrapper {
+
+    padding: 1.5rem;
+
+  }
+
+  .banner {
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 2.5rem;
+
+    padding: 3rem;
+
   }
 
   .banner-right {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
 
-    .productos-destacados,
-    .promo-slider {
-      display: flex;
-      gap: 15px;
-      overflow-x: auto;
-      padding-bottom: 10px;
+    width: 100%;
 
-      .producto-card,
-      .promo-card {
-        background: rgba(255,255,255,0.25);
-        backdrop-filter: blur(4px);
-        border-radius: 12px;
-        min-width: 150px;
-        padding: 12px;
-        text-align: center;
-        transition: transform 0.3s;
-
-        &:hover {
-          transform: translateY(-6px);
-        }
-
-        img {
-          width: 100%;
-          height: 130px;
-          object-fit: cover;
-          border-radius: 8px;
-          margin-bottom: 8px;
-        }
-
-        h3 {
-          font-size: 1rem;
-          margin-bottom: 4px;
-        }
-
-        p {
-          font-size: 0.85rem;
-          opacity: 0.9;
-          line-height: 1.2;
-        }
-      }
-    }
   }
-}
 
-/* RESPONSIVE */
-@media (max-width: 1024px) {
-  .banner {
-    flex-direction: column;
-    text-align: center;
-
-    .banner-left {
-      max-width: 100%;
-      margin-bottom: 20px;
-    }
-
-    .banner-right {
-      width: 100%;
-      justify-content: center;
-
-      .productos-destacados,
-      .promo-slider {
-        justify-content: flex-start;
-        overflow-x: auto;
-        gap: 12px;
-
-        .producto-card,
-        .promo-card {
-          min-width: 130px;
-
-          img {
-            height: 110px;
-          }
-
-          h3 {
-            font-size: 0.95rem;
-          }
-
-          p {
-            font-size: 0.8rem;
-          }
-        }
-      }
-    }
-  }
-}
-
-@media (max-width: 600px) {
-  .banner {
-    padding: 22px;
-    border-radius: 12px;
-
-    .banner-left h1 {
-      font-size: 1.8rem;
-    }
-
-    .banner-left p {
-      font-size: 0.95rem;
-    }
-
-    .banner-left .btn-primary {
-      padding: 10px 20px;
-      font-size: 0.9rem;
-    }
-
-    .banner-right .productos-destacados,
-    .banner-right .promo-slider {
-      .producto-card,
-      .promo-card {
-        min-width: 120px;
-
-        img {
-          height: 90px;
-        }
-
-        h3 {
-          font-size: 0.85rem;
-        }
-
-        p {
-          font-size: 0.75rem;
-        }
-      }
-    }
-  }
-}
-
-/* MINI MOVILES */
-@media (max-width: 480px) {
   .banner-left h1 {
-    font-size: 1.5rem;
+
+    font-size: 3rem;
+
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .banner {
+
+    padding: 2rem;
+
+    min-height: auto;
+
+    border-radius: 24px;
+
+  }
+
+  .banner-left h1 {
+
+    font-size: 2.3rem;
+
   }
 
   .banner-left p {
-    font-size: 0.8rem;
+
+    font-size: 1rem;
+
   }
 
-  .banner-left .btn-primary {
-    padding: 8px 16px;
-    font-size: 0.8rem;
+  .promo-card,
+  .producto-card {
+
+    min-width: 190px;
+
   }
 
-  .banner-right .productos-destacados,
-  .banner-right .promo-slider {
-    .producto-card,
-    .promo-card {
-      min-width: 100px;
+  .image-container {
 
-      img {
-        height: 70px;
-      }
+    height: 150px;
 
-      h3 {
-        font-size: 0.75rem;
-      }
-
-      p {
-        font-size: 0.65rem;
-      }
-    }
   }
+
+}
+
+@media (max-width: 480px) {
+
+  .banner-wrapper {
+
+    padding: 1rem;
+
+  }
+
+  .banner {
+
+    padding: 1.5rem;
+
+  }
+
+  .banner-left h1 {
+
+    font-size: 1.9rem;
+
+  }
+
+  .banner-left p {
+
+    font-size: 0.92rem;
+
+  }
+
+  .promo-card,
+  .producto-card {
+
+    min-width: 160px;
+
+  }
+
+  .image-container {
+
+    height: 120px;
+
+  }
+
 }

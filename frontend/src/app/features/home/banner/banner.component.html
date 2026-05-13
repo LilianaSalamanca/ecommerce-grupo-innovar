@@ -1,51 +1,155 @@
-<!-- BANNER -->
-<section class="banner" *ngIf="!cargando">
+<div class="banner-wrapper">
 
-  <!-- ====== TEXTO IZQUIERDO ====== -->
-  <div class="banner-left">
-    <h1>
-      {{ mostrandoPromociones ? 'Promociones Especiales' : 'Productos Destacados' }}
-    </h1>
+  <!-- ================= BANNER ================= -->
 
-    <p>
-      {{ mostrandoPromociones
-          ? 'Aprovecha nuestras promociones por tiempo limitado.'
-          : 'Los productos más populares y mejor valorados por nuestros clientes.' }}
-    </p>
+  <section
+    class="banner"
+    *ngIf="!cargando">
 
-  </div>
+    <!-- ================= LEFT ================= -->
 
-  <!-- ====== LADO DERECHO ====== -->
-  <div class="banner-right">
+    <div class="banner-left">
 
-    <!-- PROMOCIONES -->
-    <div class="promo-slider" *ngIf="mostrandoPromociones && promociones.length > 0">
-        <div class="promo-card" *ngFor="let promo of promociones">
-            <img [src]="getImagenUrl(promo.imagenDestacada)" [alt]="promo.nombre">
-            <h3>{{ promo.nombre }}</h3>
-            <p>{{ promo.descripcion }}</p>
+      <span class="badge-banner">
+
+        OFERTAS DESTACADAS
+
+      </span>
+
+      <h1>
+
+        Promociones Especiales
+
+      </h1>
+
+      <p>
+
+        Descubre promociones exclusivas y productos destacados
+        seleccionados especialmente para nuestros clientes.
+
+      </p>
+
+    </div>
+
+    <!-- ================= RIGHT ================= -->
+
+    <div class="banner-right">
+
+      <!-- ================= PROMOCIONES ================= -->
+
+      <div
+        class="promo-slider"
+        *ngIf="promociones.length > 0">
+
+        <div
+          class="promo-card"
+          *ngFor="let promo of promociones">
+
+          <div class="image-container">
+
+            <img
+              [src]="getImagenUrl(promo.imagenUrl)"
+              [alt]="promo.titulo">
+
+          </div>
+
+          <div class="card-content">
+
+            <span class="promo-badge">
+
+              PROMOCIÓN
+
+            </span>
+
+            <h3>
+
+              {{ promo.titulo }}
+
+            </h3>
+
+            <p>
+
+              {{ promo.descripcion }}
+
+            </p>
+
+          </div>
+
         </div>
-    </div>
 
-    <!-- PRODUCTOS DESTACADOS -->
-    <div class="productos-destacados" *ngIf="!mostrandoPromociones && productosDestacados.length > 0">
-      <div class="producto-card" *ngFor="let producto of productosDestacados">
-        <img [src]="getImagenUrl(producto.imagenDestacada)" [alt]="producto.nombre">
-        <h3>{{ producto.nombre }}</h3>
-        <p>{{ producto.precioPublico | currency:'COP':'symbol' }}</p>
       </div>
+
+      <!-- ================= PRODUCTOS DESTACADOS ================= -->
+
+      <div
+        class="productos-destacados"
+        *ngIf="promociones.length === 0 && productosDestacados.length > 0">
+
+        <div
+          class="producto-card"
+          *ngFor="let producto of productosDestacados">
+
+          <div class="image-container">
+
+            <img
+              [src]="getImagenUrl(producto.imagenDestacada)"
+              [alt]="producto.nombre">
+
+          </div>
+
+          <div class="card-content">
+
+            <h3>
+
+              {{ producto.nombre }}
+
+            </h3>
+
+            <span class="precio">
+
+              {{ producto.precioPublico | currency:'COP':'symbol' }}
+
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ================= VACÍO ================= -->
+
+      <div
+        class="sin-contenido"
+        *ngIf="
+          promociones.length === 0 &&
+          productosDestacados.length === 0
+        ">
+
+        <p>
+
+          No hay promociones disponibles actualmente.
+
+        </p>
+
+      </div>
+
     </div>
 
-    <!-- MENSAJE SI NO HAY CONTENIDO -->
-    <div class="sin-contenido" *ngIf="productosDestacados.length === 0 && promociones.length === 0">
-      <p>No hay promociones ni productos destacados disponibles en este momento.</p>
-    </div>
+  </section>
 
-  </div>
+</div>
 
-</section>
+<!-- ================= LOADING ================= -->
 
-<!-- CARGANDO -->
-<div class="banner-loading" *ngIf="cargando">
-  <span>Cargando banner...</span>
+<div
+  class="banner-loading"
+  *ngIf="cargando">
+
+  <span>
+
+    Cargando banner...
+
+  </span>
+
 </div>

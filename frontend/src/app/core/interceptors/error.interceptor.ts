@@ -1,46 +1,44 @@
-import { inject } from '@angular/core';
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
-import { AuthService } from '@core/services/auth.service';
 
-export const errorInterceptor: HttpInterceptorFn = (req, next) => {
+export const errorInterceptor: HttpInterceptorFn = (
+  req,
+  next
+) => {
 
-  const authService = inject(AuthService);
   const router = inject(Router);
 
   return next(req).pipe(
 
     catchError((error: HttpErrorResponse) => {
 
-        if (error.status === 401) {
+      if (error.status === 401) {
 
-    console.log('401 detectado en:', req.url);
+        console.warn(
+          '401 detectado:',
+          req.url
+        );
 
-    // Ignorar endpoints públicos
-    if (
-      req.url.includes('/auth') ||
-      req.url.includes('/usuarios/me')
-    ) {
-      return throwError(() => error);
-    }
+        // SOLO invalidar sesión
+        // si falla endpoint de usuario autenticado
+        if (
+          req.url.includes('/api/usuarios/me')
+        ) {
 
-    // Solo logout si NO es endpoint admin
-    if (req.url.includes('/api/admin')) {
-      console.warn('401 en admin - posible error backend, no logout');
-      return throwError(() => error);
-    }
+          localStorage.removeItem('token');
+          localStorage.removeItem('refreshToken');
 
-    if (authService.isAuthenticated()) {
-      authService.logout();
-      router.navigate(['/login'], {
-        queryParams: { returnUrl: router.url }
-      });
-    }
-  }
+          router.navigate(['/login'], {
+            queryParams: {
+              returnUrl: router.url
+            }
+          });
+        }
+      }
 
       return throwError(() => error);
     })
-
   );
 };

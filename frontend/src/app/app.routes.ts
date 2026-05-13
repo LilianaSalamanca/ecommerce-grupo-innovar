@@ -46,6 +46,20 @@ export const routes: Routes = [
         .then(c => c.RegisterComponent)
   },
 
+  {
+  path: 'forgot-password',
+    loadComponent: () =>
+      import('@features/auth/forgot-password/forgot-password.component')
+        .then(m => m.ForgotPasswordComponent)
+  },
+
+  {
+    path: 'reset-password',
+    loadComponent: () =>
+      import('@features/auth/reset-password/reset-password.component')
+        .then(m => m.ResetPasswordComponent)
+  },
+
   /* =====================================================
    * USER AREA (SOLO USER)
    * ===================================================== */
@@ -163,6 +177,20 @@ export const routes: Routes = [
       },
 
       { path: 'configuracion', component: AdminConfigComponent },
+
+      {
+        path: 'categorias',
+        loadComponent: () =>
+          import('@features/admin/categorias/admin-categorias.component')
+            .then(m => m.AdminCategoriasComponent)
+      },
+
+      {
+        path: 'promociones',
+        loadComponent: () =>
+          import('@features/admin/promociones/promociones.component')
+            .then(m => m.PromocionesComponent)
+      }
 
     ]
   },

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ValidatorFn, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { AuthService } from '@core/services/auth.service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
@@ -8,119 +8,157 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-change-password',
   standalone: true,
-  imports: [CommonModule,
-            ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule
+  ],
   templateUrl: './change-password.component.html',
   styleUrls: ['./change-password.component.scss']
 })
-export class ChangePasswordComponent implements OnInit{
+export class ChangePasswordComponent implements OnInit {
 
-  ngOnInit(): void {
-    window.scrollTo(0, 0);
-  }
-
-  form: FormGroup;
-  showCurrent = false;
-  showNew = false;
-  showConfirm = false;
   router = inject(Router);
+
+  // FORMULARIO
+  passwordForm: FormGroup;
+
+  // VISIBILIDAD PASSWORDS
+  showPasswordActual = false;
+  showPasswordNueva = false;
+  showPasswordConfirmar = false;
+
+  // ESTADO LOADING
+  loading = false;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService
   ) {
-    this.form = this.fb.group({
-      currentPassword: ['', Validators.required],
-      newPassword: ['', [
-        Validators.required,
-        Validators.minLength(8),
-        this.passwordStrengthValidator()
-      ]],
-      confirmPassword: ['', Validators.required]
+
+    this.passwordForm = this.fb.group({
+
+      actual: ['', Validators.required],
+
+      nueva: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/
+          )
+        ]
+      ],
+
+      confirmar: ['', Validators.required]
+
     }, {
-      validators: this.matchPasswords('newPassword', 'confirmPassword')
+      validators: this.matchPasswords('nueva', 'confirmar')
     });
   }
 
-  // --- VALIDACIÓN: contraseñas iguales ---
-  matchPasswords(pass1: string, pass2: string): ValidatorFn {
-    return (form: AbstractControl): ValidationErrors | null => {
-      const p1 = form.get(pass1)?.value;
-      const p2 = form.get(pass2)?.value;
+  ngOnInit(): void {
+    window.scrollTo(0, 0);
+  }
 
-      if (p1 !== p2) {
-        form.get(pass2)?.setErrors({ notMatch: true });
-        return { notMatch: true };
+  // VALIDAR CONTRASEÑAS IGUALES
+  matchPasswords(pass1: string, pass2: string): ValidatorFn {
+
+    return (form: AbstractControl): ValidationErrors | null => {
+
+      const password = form.get(pass1)?.value;
+      const confirm = form.get(pass2)?.value;
+
+      if (password !== confirm) {
+
+        form.get(pass2)?.setErrors({
+          notMatch: true
+        });
+
+        return {
+          notMatch: true
+        };
       }
 
       return null;
     };
   }
 
-  // --- VALIDACIÓN: contraseña segura ---
-  passwordStrengthValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
+  // MOSTRAR / OCULTAR PASSWORD
+  togglePassword(field: string): void {
 
-      const value = control.value || "";
-      if (!value) return null;
+    if (field === 'actual') {
+      this.showPasswordActual = !this.showPasswordActual;
+    }
 
-      const hasUpper = /[A-Z]/.test(value);
-      const hasLower = /[a-z]/.test(value);
-      const hasNumber = /[0-9]/.test(value);
-      const hasSymbol = /[^A-Za-z0-9]/.test(value);
+    if (field === 'nueva') {
+      this.showPasswordNueva = !this.showPasswordNueva;
+    }
 
-      const valid = hasUpper && hasLower && hasNumber && hasSymbol;
-
-      return valid ? null : { weakPassword: true };
-    };
+    if (field === 'confirmar') {
+      this.showPasswordConfirmar = !this.showPasswordConfirmar;
+    }
   }
 
-  toggle(field: string) {
-    if (field === 'current') this.showCurrent = !this.showCurrent;
-    if (field === 'new') this.showNew = !this.showNew;
-    if (field === 'confirm') this.showConfirm = !this.showConfirm;
-  }
+  // CAMBIAR PASSWORD
+  cambiarPassword(): void {
 
-  submit() {
-    if (this.form.invalid) {
+    if (this.passwordForm.invalid) {
+
+      this.passwordForm.markAllAsTouched();
+
       Swal.fire({
         icon: 'error',
         title: 'Formulario inválido',
         text: 'Revisa los campos antes de continuar.'
       });
+
       return;
     }
 
-    const payload = this.form.value;
+    this.loading = true;
+
+    const payload = this.passwordForm.value;
 
     this.authService.changePassword({
-      currentPassword: payload.currentPassword,
-      newPassword: payload.newPassword
+      currentPassword: payload.actual,
+      newPassword: payload.nueva
     }).subscribe({
+
       next: () => {
+
+        this.loading = false;
+
         Swal.fire({
           icon: 'success',
           title: 'Contraseña actualizada',
-          text: 'Tu contraseña se ha cambiado correctamente.',
-          timer: 2000
+          text: 'Tu contraseña se cambió correctamente.',
+          timer: 2000,
+          showConfirmButton: false
         });
 
-        this.form.reset();
+        this.passwordForm.reset();
       },
+
       error: (err) => {
+
+        this.loading = false;
+
         console.error(err);
 
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: err?.error?.message || 'No se pudo cambiar la contraseña.'
+          text:
+            err?.error?.message ||
+            'No se pudo cambiar la contraseña'
         });
       }
     });
   }
 
-  goBack() {
+  // VOLVER
+  goBack(): void {
     this.router.navigate(['/dashboard']);
-  };
-
+  }
 }

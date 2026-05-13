@@ -47,27 +47,16 @@ export class ProductDetailComponent implements OnInit {
     this.productoService.obtenerProductosById(id).subscribe(prod => {
       this.producto = prod;
 
-      // Cargar similares usando la lógica que sí funciona
-      this.cargarSimilares(
-        prod.categoria?.id ?? 0,
-        prod.subcategoria?.id ?? 0,
-        prod.id
-      );
+      this.cargarRelacionados(prod.id);
 
       this.cargando = false;
     });
+    
   }
 
-  private cargarSimilares(categoriaId: number, subcategoriaId: number, actualId: number) {
-    this.productoService.obtenerProductos().subscribe(productos => {
-      this.relacionados = productos
-        .filter(p =>
-          p.id !== actualId &&
-          p.categoria?.id === categoriaId &&
-          p.subcategoria?.id === subcategoriaId
-        )
-        .slice(0, 6); // Máximo 6 productos
-    });
+  private cargarRelacionados(productId: number) {
+    this.productoService.obtenerRelacionados(productId)
+      .subscribe(res => this.relacionados = res);
   }
 
    agregarAlCarrito(event: Event) {

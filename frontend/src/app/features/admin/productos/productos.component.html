@@ -124,16 +124,26 @@
           class="preview-img">
 
       <label>Categoría</label>
-      <select [(ngModel)]="nuevoProducto.categoria">
+      <select [(ngModel)]="nuevoProducto.categoria" 
+              (change)="onCategoriaChange()">   
         <option *ngFor="let c of categorias" [ngValue]="c">
           {{ c.nombre }}
         </option>
       </select>
 
       <label>Subcategoría</label>
-      <select [(ngModel)]="nuevoProducto.subcategoria">
-        <option *ngFor="let sc of subcategorias" [ngValue]="sc">
+      <select [(ngModel)]="nuevoProducto.subcategoria"
+              [disabled]="!nuevoProducto.categoria">
+        <option [ngValue]="undefined">
+          Selecciona una subcategoría
+        </option>
+
+        <option
+          *ngFor="let sc of subcategoriasFiltradas"
+          [ngValue]="sc">
+
           {{ sc.nombre }}
+
         </option>
       </select>
 

@@ -5,78 +5,210 @@
   </button>
 
   <h2 class="title">Mi Perfil</h2>
-  <p class="subtitle">Actualiza tu información personal</p>
-
-  <!-- Mensaje éxito -->
-  <div *ngIf="message" class="alert success">
-    {{ message }}
-  </div>
-
-  <!-- Mensaje error -->
-  <div *ngIf="errorMessage" class="alert error">
-    {{ errorMessage }}
-  </div>
+  <p class="subtitle">
+    Actualiza tu información personal
+  </p>
 
   <div class="profile-card">
 
     <div class="avatar-section">
+
       <div class="avatar">
-        <span>{{ profileForm.get('nombre')?.value?.charAt(0) }}</span>
+        <span>
+          {{ profileForm.get('nombre')?.value?.charAt(0) }}
+        </span>
       </div>
+
     </div>
 
-    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+    <form
+      [formGroup]="profileForm"
+      (ngSubmit)="onSubmit()">
 
       <div class="form-grid">
 
         <!-- NOMBRE -->
         <div class="form-group">
-          <label for="nombre">Nombre</label>
-          <input id="nombre" type="text" formControlName="nombre"
-                 [class.error]="profileForm.get('nombre')?.invalid && profileForm.get('nombre')?.touched">
+
+          <label for="nombre">
+            Nombre
+          </label>
+
+          <input
+            id="nombre"
+            type="text"
+            formControlName="nombre"
+
+            [class.error]="
+              f['nombre'].invalid &&
+              f['nombre'].touched
+            ">
+
+          <small
+            class="validation-error"
+            *ngIf="
+              f['nombre'].touched &&
+              f['nombre'].errors?.['required']
+            ">
+
+            El nombre es obligatorio
+
+          </small>
+
+          <small
+            class="validation-error"
+            *ngIf="
+              f['nombre'].touched &&
+              f['nombre'].errors?.['minlength']
+            ">
+
+            Mínimo 2 caracteres
+
+          </small>
+
         </div>
 
         <!-- APELLIDO -->
         <div class="form-group">
-          <label for="apellido">Apellido</label>
-          <input id="apellido" type="text" formControlName="apellido"
-                 [class.error]="profileForm.get('apellido')?.invalid && profileForm.get('apellido')?.touched">
+
+          <label for="apellido">
+            Apellido
+          </label>
+
+          <input
+            id="apellido"
+            type="text"
+            formControlName="apellido"
+
+            [class.error]="
+              f['apellido'].invalid &&
+              f['apellido'].touched
+            ">
+
+          <small
+            class="validation-error"
+            *ngIf="
+              f['apellido'].touched &&
+              f['apellido'].errors?.['required']
+            ">
+
+            El apellido es obligatorio
+
+          </small>
+
+          <small
+            class="validation-error"
+            *ngIf="
+              f['apellido'].touched &&
+              f['apellido'].errors?.['minlength']
+            ">
+
+            Mínimo 2 caracteres
+
+          </small>
+
         </div>
 
         <!-- EMAIL -->
         <div class="form-group full">
-          <label for="email">Correo electrónico</label>
-          <input id="email" type="email" formControlName="email" class="disabled">
+
+          <label for="email">
+            Correo electrónico
+          </label>
+
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            class="disabled">
+
         </div>
 
         <!-- TELÉFONO -->
         <div class="form-group full">
-          <label for="telefono">Teléfono</label>
-          <input id="telefono" type="text" formControlName="telefono">
+
+          <label for="telefono">
+            Teléfono
+          </label>
+
+          <input
+            id="telefono"
+            type="text"
+            formControlName="telefono"
+
+            [class.error]="
+              f['telefono'].invalid &&
+              f['telefono'].touched
+            ">
+
+          <small
+            class="validation-error"
+            *ngIf="
+              f['telefono'].touched &&
+              f['telefono'].errors?.['pattern']
+            ">
+
+            Número de teléfono inválido
+
+          </small>
+
         </div>
 
         <!-- DIRECCIÓN -->
         <div class="form-group full">
-          <label for="direccion">Dirección</label>
-          <input id="direccion" type="text" formControlName="direccion">
+
+          <label for="direccion">
+            Dirección
+          </label>
+
+          <input
+            id="direccion"
+            type="text"
+            formControlName="direccion">
+
         </div>
 
         <!-- CIUDAD -->
         <div class="form-group">
-          <label for="ciudad">Ciudad</label>
-          <input id="ciudad" type="text" formControlName="ciudad">
+
+          <label for="ciudad">
+            Ciudad
+          </label>
+
+          <input
+            id="ciudad"
+            type="text"
+            formControlName="ciudad">
+
         </div>
 
         <!-- DEPARTAMENTO -->
         <div class="form-group">
-          <label for="departamento">Departamento</label>
-          <input id="departamento" type="text" formControlName="departamento">
+
+          <label for="departamento">
+            Departamento
+          </label>
+
+          <input
+            id="departamento"
+            type="text"
+            formControlName="departamento">
+
         </div>
 
       </div>
 
-      <button type="submit" class="btn-save" [disabled]="loading">
-        {{ loading ? 'Guardando...' : 'Guardar cambios' }}
+      <button
+        type="submit"
+        class="btn-save"
+        [disabled]="loading">
+
+        {{
+          loading
+            ? 'Guardando...'
+            : 'Guardar cambios'
+        }}
+
       </button>
 
     </form>

@@ -125,6 +125,40 @@
   }
 }
 
+.forgot {
+  margin-top: 1rem;
+  text-align: center;
+
+  a {
+    display: inline-block;
+    font-size: 0.9rem;
+    color: #3b82f6;
+    font-weight: 500;
+    text-decoration: none;
+    position: relative;
+    transition: color 0.2s;
+
+    &::after {
+      content: "";
+      position: absolute;
+      width: 0%;
+      height: 1px;
+      left: 0;
+      bottom: -2px;
+      background: #3b82f6;
+      transition: width 0.2s;
+    }
+
+    &:hover::after {
+      width: 100%;
+    }
+
+    &:hover {
+      color: #2563eb;
+    }
+  }
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }

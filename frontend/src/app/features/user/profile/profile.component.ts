@@ -3,6 +3,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '@core/services/user.service';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-profile',
@@ -17,9 +18,10 @@ import { Router } from '@angular/router';
 export class ProfileComponent implements OnInit {
 
   profileForm!: FormGroup;
-  message: string = '';
-  errorMessage: string = '';
+
+  // ESTADO UI
   loading = false;
+
   router = inject(Router);
 
   constructor(
@@ -28,79 +30,177 @@ export class ProfileComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    window.scrollTo(0, 0)
-    
+
+    window.scrollTo(0, 0);
+
     this.initForm();
     this.loadUserData();
   }
 
   // ===============================
-  // Inicializar formulario vacío
+  // INICIALIZAR FORMULARIO
   // ===============================
   initForm(): void {
+
     this.profileForm = this.fb.group({
-      nombre: ['', Validators.required],
-      apellido: ['', Validators.required],
-      email: [{ value: '', disabled: true }],  // No editable
-      telefono: [''],
-      direccion: [''],
-      ciudad: [''],
-      departamento: ['']
+
+      nombre: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(50)
+        ]
+      ],
+
+      apellido: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(50)
+        ]
+      ],
+
+      email: [
+        {
+          value: '',
+          disabled: true
+        }
+      ],
+
+      telefono: [
+        '',
+        [
+          Validators.pattern(/^[0-9+\-\s()]{7,20}$/)
+        ]
+      ],
+
+      direccion: [
+        '',
+        [
+          Validators.maxLength(120)
+        ]
+      ],
+
+      ciudad: [
+        '',
+        [
+          Validators.maxLength(60)
+        ]
+      ],
+
+      departamento: [
+        '',
+        [
+          Validators.maxLength(60)
+        ]
+      ]
     });
   }
 
+  // ===============================
+  // GETTERS FORM
+  // ===============================
+  get f() {
+    return this.profileForm.controls;
+  }
+
   // ===============================================
-  // Cargar datos del usuario al abrir la vista
+  // CARGAR DATOS DEL USUARIO
   // ===============================================
   loadUserData(): void {
+
     this.userService.getProfile().subscribe({
+
       next: (user) => {
+
         this.profileForm.patchValue({
+
           nombre: user.nombre,
           apellido: user.apellido,
-          email: user.email,  // aunque está disabled, sí se puede mostrar
+          email: user.email,
           telefono: user.telefono,
           direccion: user.direccion,
           ciudad: user.ciudad,
           departamento: user.departamento
         });
       },
-      error: () => {
-        this.errorMessage = 'Error al cargar los datos del usuario.';
+
+      error: (err) => {
+
+        console.error(err);
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudieron cargar los datos del perfil.'
+        });
       }
     });
   }
 
   // ===============================
-  // Guardar cambios
+  // GUARDAR CAMBIOS
   // ===============================
   onSubmit(): void {
+
     if (this.profileForm.invalid) {
+
       this.profileForm.markAllAsTouched();
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Formulario inválido',
+        text: 'Revisa los campos antes de continuar.'
+      });
+
       return;
     }
 
     this.loading = true;
-    this.message = '';
-    this.errorMessage = '';
 
     const updatedData = {
-      ...this.profileForm.getRawValue() // permite extraer valores incluso de los campos disabled
+      ...this.profileForm.getRawValue()
     };
 
-    this.userService.updateProfile(updatedData).subscribe({
-      next: () => {
-        this.message = 'Datos actualizados correctamente.';
-        this.loading = false;
-      },
-      error: (err) => {
-        this.errorMessage = err.error?.message || 'Error al actualizar el perfil.';
-        this.loading = false;
-      }
-    });
+    this.userService.updateProfile(updatedData)
+      .subscribe({
+
+        next: () => {
+
+          this.loading = false;
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Perfil actualizado',
+            text: 'Los datos se actualizaron correctamente.',
+            timer: 2000,
+            showConfirmButton: false
+          });
+        },
+
+        error: (err) => {
+
+          this.loading = false;
+
+          console.error(err);
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text:
+              err?.error?.message ||
+              'No se pudo actualizar el perfil.'
+          });
+        }
+      });
   }
 
-  goBack() {
+  // ===============================
+  // VOLVER
+  // ===============================
+  goBack(): void {
     this.router.navigate(['/dashboard']);
-  };
+  }
 }

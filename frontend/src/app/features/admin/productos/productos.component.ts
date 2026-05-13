@@ -35,6 +35,7 @@ export class ProductosComponent implements OnInit {
 
   categorias: Categoria[] = [];
   subcategorias: Subcategoria[] = [];
+  subcategoriasFiltradas: Subcategoria[] = [];
 
   loading = false;
 
@@ -72,7 +73,6 @@ export class ProductosComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarCategorias();
-    this.cargarSubcategorias();
     this.cargarProductos();
   }
 
@@ -165,7 +165,7 @@ export class ProductosComponent implements OnInit {
       stock: 0,
       imagenDestacada: '',
       categoria: this.categorias[0] ?? undefined,
-      subcategoria: this.subcategorias[0] ?? undefined
+      subcategoria: undefined
     };
 
     this.previewImagen = null;
@@ -180,10 +180,22 @@ export class ProductosComponent implements OnInit {
 
     this.nuevoProducto = { ...producto };
 
-    // 🔥 mostrar imagen actual
+    // mostrar imagen actual
     this.previewImagen = producto.imagenDestacada;
 
     this.imagenFile = undefined as any;
+
+    this.adminProductoService
+    .listarSubcategoriasPorCategoria(
+      producto.categoria.id
+    )
+    .subscribe({
+
+      next: (data) => {
+        this.subcategoriasFiltradas = data;
+      }
+
+    });
 
     this.editandoProducto = true;
     this.modalAbierto = true;
@@ -419,5 +431,39 @@ export class ProductosComponent implements OnInit {
 
   onImageError(event: any) {
     event.target.src = 'assets/no-image.png';
+  }
+
+  onCategoriaChange() {
+
+    if (!this.nuevoProducto.categoria?.id) {
+
+      this.subcategoriasFiltradas = [];
+      return;
+
+    }
+
+    this.adminProductoService
+      .listarSubcategoriasPorCategoria(
+        this.nuevoProducto.categoria.id
+      )
+      .subscribe({
+
+        next: (data) => {
+
+          this.subcategoriasFiltradas = data;
+
+          // resetear subcategoría
+          this.nuevoProducto.subcategoria = undefined;
+
+        },
+
+        error: (err) => {
+
+          console.error(err);
+
+        }
+
+      });
+
   }
 }
