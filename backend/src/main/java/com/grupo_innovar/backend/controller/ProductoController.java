@@ -109,4 +109,9 @@ public class ProductoController {
             this.stock = stock;
         }
     }
+
+    @GetMapping("/{id}/relacionados")
+    public ResponseEntity<List<Producto>> relacionados(@PathVariable Long id) {
+        return ResponseEntity.ok(productoService.obtenerRelacionados(id));
+    }
 }

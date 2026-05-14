@@ -114,6 +114,18 @@ public class Pedido {
     @Column(nullable = false)
     private LocalDateTime fechaActualizacion;
 
+    @Column
+    private LocalDateTime fechaProcesando;
+
+    @Column
+    private LocalDateTime fechaEnviado;
+
+    @Column
+    private LocalDateTime fechaCompletado;
+
+    @Column
+    private LocalDateTime fechaCancelado;
+
     /* ================= LIFECYCLE ================= */
 
     @PrePersist
@@ -188,6 +200,22 @@ public class Pedido {
 
     public Pago getPago() { return pago; }
 
+    public LocalDateTime getFechaProcesando() {
+        return fechaProcesando;
+    }
+
+    public LocalDateTime getFechaEnviado() {
+        return fechaEnviado;
+    }
+
+    public LocalDateTime getFechaCompletado() {
+        return fechaCompletado;
+    }
+
+    public LocalDateTime getFechaCancelado() {
+        return fechaCancelado;
+    }
+
     /* ================= SETTERS ================= */
 
     public void setUsuario(Usuario usuario) { this.usuario = usuario; }
@@ -227,4 +255,19 @@ public class Pedido {
         }
     }
 
+    public void setFechaProcesando(LocalDateTime fechaProcesando) {
+        this.fechaProcesando = fechaProcesando;
+    }
+
+    public void setFechaEnviado(LocalDateTime fechaEnviado) {
+        this.fechaEnviado = fechaEnviado;
+    }
+
+    public void setFechaCompletado(LocalDateTime fechaCompletado) {
+        this.fechaCompletado = fechaCompletado;
+    }
+
+    public void setFechaCancelado(LocalDateTime fechaCancelado) {
+        this.fechaCancelado = fechaCancelado;
+    }
 }

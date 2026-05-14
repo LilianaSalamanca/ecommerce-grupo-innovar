@@ -12,9 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 @Service
@@ -108,5 +111,66 @@ public class ProductoService {
 
     public Page<Producto> listar(Pageable pageable) {
         return productoRepository.findAll(pageable);
+    }
+
+    public List<Producto> obtenerRelacionados(Long productoId) {
+
+        Producto base = productoRepository.findById(productoId)
+            .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
+        List<Producto> resultado = new ArrayList<>();
+
+        List<Producto> sub = productoRepository.relacionadosMismaSubcategoria(
+            productoId,
+            base.getSubcategoria().getId(),
+            PageRequest.of(0, 10)
+        );
+
+        List<Producto> cat = productoRepository.relacionadosMismaCategoria(
+            productoId,
+            base.getCategoria().getId(),
+            PageRequest.of(0, 10)
+        );
+
+        List<Producto> marca = productoRepository.relacionadosMismaMarca(
+            productoId,
+            base.getMarca(),
+            PageRequest.of(0, 10)
+        );
+
+        // Mezcla
+        Collections.shuffle(sub);
+        Collections.shuffle(cat);
+        Collections.shuffle(marca);
+
+        // Agregar con prioridad
+        agregar(resultado, sub);
+        agregar(resultado, cat);
+        agregar(resultado, marca);
+
+        // RELLENO: si no hay suficientes
+        if (resultado.size() < 5) {
+            List<Producto> random = productoRepository.findAll(PageRequest.of(0, 20)).getContent();
+            Collections.shuffle(random);
+            agregar(resultado, random);
+        }
+
+        // Garantizar EXACTAMENTE 5
+        return resultado.stream().limit(5).toList();
+    }
+
+    private void agregar(List<Producto> resultado, List<Producto> fuente) {
+
+        for (Producto p : fuente) {
+
+            if (resultado.size() >= 5) break;
+
+            boolean yaExiste = resultado.stream()
+                .anyMatch(r -> r.getId().equals(p.getId()));
+
+            if (!yaExiste) {
+                resultado.add(p);
+            }
+        }
     }
 }

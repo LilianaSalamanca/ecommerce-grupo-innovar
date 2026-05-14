@@ -40,6 +40,11 @@ public final class PedidoMapper {
 
         dto.setFechaCreacion(p.getFechaCreacion());
 
+        dto.setFechaProcesando(p.getFechaProcesando());
+        dto.setFechaEnviado(p.getFechaEnviado());
+        dto.setFechaCompletado(p.getFechaCompletado());
+        dto.setFechaCancelado(p.getFechaCancelado());
+
         // DETALLES
         List<PedidoDetalleDTO> dets = p.getDetalles()
                 .stream()
@@ -48,7 +53,7 @@ public final class PedidoMapper {
 
         dto.setDetalles(dets);
 
-        // PAGO 🔥
+        // PAGO 
         if (p.getPago() != null) {
             dto.setEstadoPago(p.getPago().getEstadoPago().name());
             dto.setMetodoPagoDetalle(p.getPago().getMetodoPago().name());

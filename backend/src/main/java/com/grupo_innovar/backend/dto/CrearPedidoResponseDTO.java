@@ -40,7 +40,7 @@ public class CrearPedidoResponseDTO {
     private LocalDateTime fechaCreacion;
 
     // ============================
-    // PAGO (🔥 NUEVO)
+    // PAGO 
     // ============================
 
     private String estadoPago;
@@ -53,6 +53,12 @@ public class CrearPedidoResponseDTO {
     // ============================
 
     private List<PedidoDetalleDTO> detalles;
+
+
+    private LocalDateTime fechaProcesando;
+    private LocalDateTime fechaEnviado;
+    private LocalDateTime fechaCompletado;
+    private LocalDateTime fechaCancelado;
 
     // ============================
     // GETTERS Y SETTERS
@@ -117,4 +123,36 @@ public class CrearPedidoResponseDTO {
 
     public String getCheckoutUrl() { return checkoutUrl; }
     public void setCheckoutUrl(String checkoutUrl) { this.checkoutUrl = checkoutUrl; }
+
+    public LocalDateTime getFechaProcesando() {
+        return fechaProcesando;
+    }
+
+    public void setFechaProcesando(LocalDateTime fechaProcesando) {
+        this.fechaProcesando = fechaProcesando;
+    }
+
+    public LocalDateTime getFechaEnviado() {
+        return fechaEnviado;
+    }
+
+    public void setFechaEnviado(LocalDateTime fechaEnviado) {
+        this.fechaEnviado = fechaEnviado;
+    }
+
+    public LocalDateTime getFechaCompletado() {
+        return fechaCompletado;
+    }
+
+    public void setFechaCompletado(LocalDateTime fechaCompletado) {
+        this.fechaCompletado = fechaCompletado;
+    }
+
+    public LocalDateTime getFechaCancelado() {
+        return fechaCancelado;
+    }
+
+    public void setFechaCancelado(LocalDateTime fechaCancelado) {
+        this.fechaCancelado = fechaCancelado;
+    }
 }

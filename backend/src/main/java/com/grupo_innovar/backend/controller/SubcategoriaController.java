@@ -8,9 +8,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/subcategorias")
-@CrossOrigin(origins = "*")
+@CrossOrigin
 public class SubcategoriaController {
-    
+
     private final SubcategoriaService subcategoriaService;
 
     public SubcategoriaController(SubcategoriaService subcategoriaService) {
@@ -19,11 +19,31 @@ public class SubcategoriaController {
 
     @GetMapping
     public List<Subcategoria> listar() {
-        return subcategoriaService.listarTodas();
+        return subcategoriaService.listar();
+    }
+
+    @GetMapping("/categoria/{categoriaId}")
+    public List<Subcategoria> listarPorCategoria(
+            @PathVariable Long categoriaId
+    ) {
+        return subcategoriaService.listarPorCategoria(categoriaId);
     }
 
     @PostMapping
     public Subcategoria guardar(@RequestBody Subcategoria subcategoria) {
         return subcategoriaService.guardar(subcategoria);
+    }
+
+    @PutMapping("/{id}")
+    public Subcategoria actualizar(
+            @PathVariable Long id,
+            @RequestBody Subcategoria subcategoria
+    ) {
+        return subcategoriaService.actualizar(id, subcategoria);
+    }
+
+    @DeleteMapping("/{id}")
+    public void eliminar(@PathVariable Long id) {
+        subcategoriaService.eliminar(id);
     }
 }

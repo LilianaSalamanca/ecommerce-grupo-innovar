@@ -8,7 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/categorias")
-@CrossOrigin(origins = "*")
+@CrossOrigin
 public class CategoriaController {
 
     private final CategoriaService categoriaService;
@@ -19,11 +19,24 @@ public class CategoriaController {
 
     @GetMapping
     public List<Categoria> listar() {
-        return categoriaService.listarTodas();
+        return categoriaService.listar();
     }
 
     @PostMapping
     public Categoria guardar(@RequestBody Categoria categoria) {
         return categoriaService.guardar(categoria);
+    }
+
+    @PutMapping("/{id}")
+    public Categoria actualizar(
+            @PathVariable Long id,
+            @RequestBody Categoria categoria
+    ) {
+        return categoriaService.actualizar(id, categoria);
+    }
+
+    @DeleteMapping("/{id}")
+    public void eliminar(@PathVariable Long id) {
+        categoriaService.eliminar(id);
     }
 }

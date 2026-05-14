@@ -3,8 +3,10 @@ package com.grupo_innovar.backend.service;
 import com.grupo_innovar.backend.dto.CrearPedidoRequest;
 import com.grupo_innovar.backend.dto.CrearPedidoResponseDTO;
 import com.grupo_innovar.backend.dto.ItemPedidoRequest;
+import com.grupo_innovar.backend.dto.WompiWidgetResponseDTO;
 import com.grupo_innovar.backend.mapper.PedidoMapper;
 import com.grupo_innovar.backend.model.Pedido;
+import com.grupo_innovar.backend.model.Pedido.EstadoPedido;
 import com.grupo_innovar.backend.model.DetallePedido;
 import com.grupo_innovar.backend.model.Producto;
 import com.grupo_innovar.backend.model.Usuario;
@@ -15,15 +17,26 @@ import com.grupo_innovar.backend.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.List;
+
+import java.time.LocalDateTime;
 
 @Service
 public class PedidoService {
+
+    @Value("${wompi.public-key}")
+    private String wompiPublicKey;
+
+    @Value("${wompi.integrity-secret}")
+    private String wompiIntegritySecret;
 
     private final PedidoRepository pedidoRepository;
     private final ProductoRepository productoRepository;
@@ -189,5 +202,126 @@ public class PedidoService {
         }
 
         return PedidoMapper.toDto(pedido);
+    }
+
+    @Transactional
+    public void actualizarEstado(
+            Pedido pedido,
+            EstadoPedido nuevoEstado
+    ) {
+
+        validarTransicion(
+                pedido.getEstadoPedido(),
+                nuevoEstado
+        );
+
+        switch (nuevoEstado) {
+
+            case PENDIENTE -> {
+                // Estado inicial
+            }
+
+            case PROCESANDO -> {
+                if (pedido.getFechaProcesando() == null) {
+                    pedido.setFechaProcesando(LocalDateTime.now());
+                }
+            }
+
+            case ENVIADO -> {
+                if (pedido.getFechaEnviado() == null) {
+                    pedido.setFechaEnviado(LocalDateTime.now());
+                }
+            }
+
+            case COMPLETADO -> {
+                if (pedido.getFechaCompletado() == null) {
+                    pedido.setFechaCompletado(LocalDateTime.now());
+                }
+            }
+
+            case CANCELADO -> {
+                pedido.setFechaCancelado(LocalDateTime.now());
+            }
+        }
+
+        pedido.setEstadoPedido(nuevoEstado);
+
+        pedidoRepository.save(pedido);
+    }
+
+    private void validarTransicion(
+            Pedido.EstadoPedido actual,
+            Pedido.EstadoPedido nuevo
+    ) {
+
+        if (actual == Pedido.EstadoPedido.CANCELADO) {
+            throw new IllegalStateException(
+                    "Un pedido cancelado no puede modificarse"
+            );
+        }
+
+        if (actual == Pedido.EstadoPedido.COMPLETADO) {
+            throw new IllegalStateException(
+                    "Un pedido completado no puede modificarse"
+            );
+        }
+    }
+
+    public WompiWidgetResponseDTO generarWidgetWompi(Long pedidoId) {
+
+        Pedido pedido = pedidoRepository.findById(pedidoId)
+                .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
+
+        Long amountInCents = pedido.getTotal()
+                .multiply(BigDecimal.valueOf(100))
+                .longValue();
+
+        String reference = pedido.getPago().getReferencia();
+
+        String signature = generarFirmaIntegridad(
+                reference,
+                amountInCents,
+                "COP"
+        );
+
+        WompiWidgetResponseDTO dto = new WompiWidgetResponseDTO();
+
+        dto.setPublicKey(wompiPublicKey);
+        dto.setReference(reference);
+        dto.setAmountInCents(amountInCents);
+        dto.setIntegritySignature(signature);
+
+        return dto;
+    }
+
+    private String generarFirmaIntegridad(
+            String reference,
+            Long amountInCents,
+            String currency) {
+
+        try {
+
+            String data = reference
+                    + amountInCents
+                    + currency
+                    + wompiIntegritySecret;
+
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+            byte[] hash = digest.digest(
+                    data.getBytes(StandardCharsets.UTF_8)
+            );
+
+            StringBuilder hex = new StringBuilder();
+
+            for (byte b : hash) {
+                hex.append(String.format("%02x", b));
+            }
+
+            return hex.toString();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error generando firma Wompi");
+        }
     }
 }

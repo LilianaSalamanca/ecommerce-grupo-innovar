@@ -2,6 +2,7 @@ package com.grupo_innovar.backend.controller;
 
 import com.grupo_innovar.backend.dto.CrearPedidoRequest;
 import com.grupo_innovar.backend.dto.CrearPedidoResponseDTO;
+import com.grupo_innovar.backend.dto.WompiWidgetResponseDTO;
 import com.grupo_innovar.backend.service.PedidoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +45,15 @@ public class PedidoController {
 
         return ResponseEntity.ok(
             pedidoService.obtenerPedidoPorIdYEmail(id, email)
+        );
+    }
+
+    @GetMapping("/{id}/wompi-widget")
+    public ResponseEntity<WompiWidgetResponseDTO> obtenerWidgetWompi(
+            @PathVariable Long id) {
+
+        return ResponseEntity.ok(
+                pedidoService.generarWidgetWompi(id)
         );
     }
 }

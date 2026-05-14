@@ -50,7 +50,7 @@ public class AdminProductoController {
             @RequestParam("imagen") MultipartFile imagen
     ) throws Exception {
 
-        String imageUrl = cloudinaryService.uploadFile(imagen);
+        //String imageUrl = cloudinaryService.uploadFile(imagen);
 
         ProductoDTO dto = new ProductoDTO();
         dto.setNombre(nombre);
@@ -62,7 +62,7 @@ public class AdminProductoController {
         dto.setStock(stock);
         dto.setCategoriaId(categoriaId);
         dto.setSubcategoriaId(subcategoriaId);
-        dto.setImagenDestacada(imageUrl);
+        //dto.setImagenDestacada(imageUrl);
 
         Producto producto = productoService.crear(dto);
 
@@ -96,7 +96,7 @@ public class AdminProductoController {
 
         // Solo sube imagen si viene nueva
         if (imagen != null && !imagen.isEmpty()) {
-            imageUrl = cloudinaryService.uploadFile(imagen);
+            //imageUrl = cloudinaryService.uploadFile(imagen);
         }
 
         ProductoDTO dto = new ProductoDTO();
