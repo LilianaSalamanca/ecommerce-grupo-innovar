@@ -11,7 +11,7 @@ import java.util.Map;
 @Service
 public class CloudinaryService {
 
-   /* private final Cloudinary cloudinary;
+   private final Cloudinary cloudinary;
 
     public CloudinaryService(
             @Value("${CLOUDINARY_CLOUD_NAME}") String cloudName,
@@ -35,5 +35,5 @@ public class CloudinaryService {
         );
 
         return result.get("secure_url").toString();
-    } */
+    }
 }
